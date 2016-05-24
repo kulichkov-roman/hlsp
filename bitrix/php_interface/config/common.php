@@ -5,10 +5,7 @@
 \Your\Environment\EnvironmentManager::getInstance()->addConfig(
 	new \Your\Environment\Configuration\CommonConfiguration(
 		array(
-			'interiorIBlockId' => 1,
-			'exteriorIBlockId' => 2,
-			'feedbackIBlockId' => 3,
-			'feedbackPropPhoneId' => 1,
+			'brandIBlock' => 4,
 		)
 	)
 );
@@ -44,4 +41,3 @@ if(\Bitrix\Main\Loader::includeModule('itconstruct.resizer'))
 		)
 	);
 }
-

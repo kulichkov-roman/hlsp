@@ -328,6 +328,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                     "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
                     "SECTIONS_LIST_PREVIEW_PROPERTY" => $arParams["SECTIONS_LIST_PREVIEW_PROPERTY"],
                     "SHOW_SECTION_LIST_PICTURES" => $arParams["SHOW_SECTION_LIST_PICTURES"],
+                    "BRAND_ID" => "233",
                 ), $component
             );?>
         </div>
@@ -563,34 +564,26 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
 
                 <?foreach($arAvailableSort as $key => $val):?>
                     <?$newSort = $sort_order == 'desc' ? 'asc' : 'desc';?>
-                    <?
-                    /**
-                     * Закрываем SEO hide
-                     */
-                    ?>
                     <span data-class="sort_btn <?=($sort == $key ? 'current' : '')?> <?=$sort_order?> <?=$key?>" data-href="<?=$APPLICATION->GetCurPageParam('sort='.$key.'&order='.$newSort, 	array('sort', 'order'))?>" class="js_link__rep">
-							<i class="icon"></i><span><?=GetMessage('SECT_SORT_'.$key)?></span><i class="arr"></i>
-						</span>
+					    <i class="icon"></i><span><?=GetMessage('SECT_SORT_'.$key)?></span><i class="arr"></i>
+					</span>
                 <?endforeach;?>
                 <?
-                if($sort == "PRICE"){
+                if($sort == "PRICE")
+                {
                     $sort = $arAvailableSort["PRICE"][0];
                 }
-                if($sort == "QUANTITY"){
+                if($sort == "QUANTITY")
+                {
                     $sort = "CATALOG_QUANTITY";
                 }
                 ?>
             </div>
             <div class="sort_display">
                 <?foreach($arDisplays as $displayType):?>
-                    <?
-                    /**
-                     * Закрываем SEO hide
-                     */
-                    ?>
                     <span rel="nofollow" data-href="<?=$APPLICATION->GetCurPageParam('display='.$displayType, 	array('display'))?>" data-class="sort_btn <?=$displayType?> <?=($display == $displayType ? 'current' : '')?>" class="js_link__rep">
-							<i title="<?=GetMessage("SECT_DISPLAY_".strtoupper($displayType))?>"></i>
-						</span>
+					    <i title="<?=GetMessage("SECT_DISPLAY_".strtoupper($displayType))?>"></i>
+					</span>
                 <?endforeach;?>
             </div>
             <!--/noindex-->
@@ -606,14 +599,36 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             }
         }
 
-        $arVariables = array();
-        CComponentEngine::ParseComponentPath(
-            $arParams['SEF_FOLDER'],
-            array(
-                $arParams['SEF_URL_TEMPLATES']['kitchens']
-            ),
-            $arVariables
-        );
+        $environment = \Your\Environment\EnvironmentManager::getInstance();
+        
+        if($arResult['VARIABLES']['BRAND'] <> '')
+        {
+            $arSort = array(
+                'SORT'=>'ASC'
+            );
+            $arSelect = array(
+                'ID',
+                'NAME'
+            );
+            $arFilter = array(
+                'IBLOCK_ID' => $environment->get('brandIBlock'),
+                'CODE' => $arResult['VARIABLES']['BRAND']
+            );
+
+            $rsBrand = \CIBlockElement::GetList(
+                $arSort,
+                $arFilter,
+                false,
+                false,
+                $arSelect
+            );
+
+            $arBrand = array();
+            if($arBrandItem = $rsBrand->Fetch())
+            {
+                $arBrand = $arBrandItem;
+            }
+        }
 
         $APPLICATION->IncludeComponent(
             "your:catalog.section.brands",
@@ -687,13 +702,12 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                 "DISPLAY_WISH_BUTTONS" => $arParams["DISPLAY_WISH_BUTTONS"],
                 "DEFAULT_COUNT" => $arParams["DEFAULT_COUNT"],
                 "LIST_DISPLAY_POPUP_IMAGE" => $arParams["LIST_DISPLAY_POPUP_IMAGE"],
-                "DEFAULT_COUNT" => $arParams["DEFAULT_COUNT"],
                 "SHOW_MEASURE" => $arParams["SHOW_MEASURE"],
                 "SHOW_HINTS" => $arParams["SHOW_HINTS"],
                 "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
                 "SECTIONS_LIST_PREVIEW_PROPERTY" => $arParams["SECTIONS_LIST_PREVIEW_PROPERTY"],
                 "SHOW_SECTION_LIST_PICTURES" => $arParams["SHOW_SECTION_LIST_PICTURES"],
-                "BRAND_ID" => ""
+                "BRAND_ID" => "233"
             ), $component
         );?>
     </div>

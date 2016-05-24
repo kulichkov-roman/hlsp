@@ -1,8 +1,10 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetPageProperty("keywords", "купить косметику");
-
-$APPLICATION->SetTitle("Корейская косметика для очищения, ухода и макияжа");?><?$APPLICATION->IncludeComponent(
+$APPLICATION->SetTitle("Корейская косметика для очищения, ухода и макияжа");
+?>
+<?
+$APPLICATION->IncludeComponent(
 	"your:catalog",
 	"catalog",
 	array(
@@ -295,9 +297,9 @@ $APPLICATION->SetTitle("Корейская косметика для очище�
 			"sections" => "",
 			"section" => "#SECTION_CODE_PATH#/",
 			"element" => "product/#ELEMENT_CODE#/",
-			"brand"         => "#SECTION_CODE_PATH#/brand/#BRANDS#/",
-			"section_dl1"   => "#SECTION_CODE_PATH#/brand/#BRANDS#/#SECTION_DL1#/",
-			"section_dl2"   => "#SECTION_CODE_PATH#/brand/#BRANDS#/#SECTION_DL1#/#SECTION_DL2#/",
+			"brand"         => "#SECTION_CODE_PATH#/brand/#BRAND#/",
+			"section_dl1"   => "#SECTION_CODE_PATH#/brand/#BRAND#/#SECTION_DL1#/",
+			"section_dl2"   => "#SECTION_CODE_PATH#/brand/#BRAND#/#SECTION_DL1#/#SECTION_DL2#/",
 			"compare" => "compare.php?action=#ACTION_CODE#",
 			"smart_filter" => "#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
 		),
@@ -308,5 +310,5 @@ $APPLICATION->SetTitle("Корейская косметика для очище�
 		)
 	),
 	false
-);?> <br>
- <br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);?>
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

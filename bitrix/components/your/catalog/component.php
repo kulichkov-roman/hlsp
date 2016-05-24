@@ -14,7 +14,7 @@ $arDefaultUrlTemplates404 = array(
 	"sections" => "",
 	"section" => "#SECTION_ID#/",
 	"element" => "#SECTION_ID#/#ELEMENT_ID#/",
-	"brand"  => "#SECTION_ID#/#ELEMENT_ID#/brand/#BRANDS#/",
+	"brand"  => "#SECTION_ID#/#ELEMENT_ID#/brand/#BRAND#/",
 	"section_dl1"  => "#SECTION_ID#/#ELEMENT_ID#/brand/#BRANDS#/#SECTION_DL1#/",
 	"section_dl2"  => "#SECTION_ID#/#ELEMENT_ID#/brand/#BRANDS#/#SECTION_DL1#/#SECTION_DL2#/",
 	"compare" => "compare.php?action=COMPARE",
