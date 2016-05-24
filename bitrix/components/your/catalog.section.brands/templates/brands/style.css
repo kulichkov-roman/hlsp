@@ -1,0 +1,180 @@
+@font-face {
+    font-family: 'Gals';
+    src: url('/fonts/Gals.eot');
+    src: url('/fonts/Gals.eot') format('embedded-opentype'),
+         url('/fonts/Gals.woff2') format('woff2'),
+         url('/fonts/Gals.woff') format('woff'),
+         url('/fonts/Gals.ttf') format('truetype'),
+         url('/fonts/Gals.svg#Gals') format('svg');
+}
+@font-face {
+    font-family: 'GalsBold';
+    src: url('/fonts/GalsBold.eot');
+    src: url('/fonts/GalsBold.eot') format('embedded-opentype'),
+         url('/fonts/GalsBold.woff2') format('woff2'),
+         url('/fonts/GalsBold.woff') format('woff'),
+         url('/fonts/GalsBold.ttf') format('truetype'),
+         url('/fonts/GalsBold.svg#GalsBold') format('svg');
+}
+@font-face {
+    font-family: "EtelkaMediumProRegular";
+    src: url("/fonts/EtelkaMediumProRegular.eot");
+    src: url("/fonts/EtelkaMediumProRegular.eot?#iefix")format("embedded-opentype"),
+    url("/fonts/EtelkaMediumProRegular.woff") format("woff"),
+    url("/fonts/EtelkaMediumProRegular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-family: "EtelkaMediumProBold";
+    src: url("/fonts/EtelkaMediumProBold.eot");
+    src: url("/fonts/EtelkaMediumProBold.eot?#iefix")format("embedded-opentype"),
+    url("/fonts/EtelkaMediumProBold.woff") format("woff"),
+    url("/fonts/EtelkaMediumProBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'font';
+    src: url('/fonts/font.eot');
+    src: url('/fonts/font.eot') format('embedded-opentype'),
+         url('/fonts/font.woff2') format('woff2'),
+         url('/fonts/font.woff') format('woff'),
+         url('/fonts/font.ttf') format('truetype'),
+         url('/fonts/font.svg#font') format('svg');
+}
+@font-face {
+    font-family: 'font2';
+    src: url('/fonts/font2.eot');
+    src: url('/fonts/font2.eot') format('embedded-opentype'),
+         url('/fonts/font2.woff2') format('woff2'),
+         url('/fonts/font2.woff') format('woff'),
+         url('/fonts/font2.ttf') format('truetype'),
+         url('/fonts/font2.svg#font') format('svg');
+}
+.container:after{
+	content:'';
+	display:block;
+	clear:both;
+}
+.sidebar{
+	float:left;
+	width:176px;
+}
+/*accordion*/
+.example-list {
+	overflow: hidden;
+	margin: 0 0 50px;
+	width: 100%;
+}
+.accordion {
+	padding:0;
+	margin:0;
+	list-style:none;
+	width:176px;
+}
+.accordion li {
+	margin :0;
+}
+.accordion .opener {
+	display:block;
+	color:#000;
+	font-family: 'font';
+	font-size:15px;
+	height:1%;
+	text-decoration:none;
+	padding:9px 10px 10px 11px;
+	border:1px solid #DADADA;
+	background:#EDEDED;
+}
+.accordion li.active .opener,
+.accordion li.active li.active .opener {
+	background:url(/images/bg2.png) no-repeat #EDEDED;
+	background-position:153px 14px;
+}
+.accordion li.active .opener,
+.accordion li.active li.active .opener:hover{
+	text-decoration:none;
+}
+.accordion .opener:hover{
+	text-decoration:underline;
+}
+.accordion p {
+	margin:0;
+	padding:10px;
+	background:#CCC;
+}
+.accordion .slide {
+	width:174px;
+	border-left:1px solid #DADADA;
+	border-right:1px solid #DADADA;
+}
+.container h1{
+	font-family: "EtelkaMediumProRegular";
+	display:block;
+	color:#202020;
+	font-size:25px;
+	margin-bottom:28px;
+}
+.accordion .slide ul{
+	margin:0;
+}
+.accordion .slide ul li{
+	border-bottom:1px solid #DADADA;
+}
+.accordion .slide ul li:last-child{
+	border:none;
+}
+.accordion .slide ul li a{
+	display:block;
+	text-decoration:none;
+	padding:9px 10px 9px 11px;
+	color:#000;
+	font-size:14px;
+	font-family: 'font';
+	line-height:16px;
+}
+.accordion .slide ul li a:hover{
+	color:#fff;
+	background: #c32560; /* Old browsers */
+	background: -moz-linear-gradient(top,  #c32560 0%, #9c0f3a 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c32560), color-stop(100%,#9c0f3a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #c32560 0%,#9c0f3a 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #c32560 0%,#9c0f3a 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #c32560 0%,#9c0f3a 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #c32560 0%,#9c0f3a 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c32560', endColorstr='#9c0f3a',GradientType=0 ); /* IE6-9 */
+}
+.accordion .slide ul li.activ a{
+	color:#fff;
+	background: #c32560; /* Old browsers */
+	background: -moz-linear-gradient(top,  #c32560 0%, #9c0f3a 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c32560), color-stop(100%,#9c0f3a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #c32560 0%,#9c0f3a 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #c32560 0%,#9c0f3a 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #c32560 0%,#9c0f3a 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #c32560 0%,#9c0f3a 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c32560', endColorstr='#9c0f3a',GradientType=0 ); /* IE6-9 */
+}
+.content{
+	float:right;
+	margin-top:1px;
+	width:780px;
+}
+.category{
+	margin:0;
+}
+.category:after{
+	content:'';
+	display:block;
+	clear:both;
+}
+
+.text p {
+    color: #000000;
+    display: block;
+    font-family: "EtelkaMediumProRegular";
+    font-size: 13px;
+    line-height: 18px;
+    margin-bottom: 10px;
+}
