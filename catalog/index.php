@@ -1,9 +1,10 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+<?
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetPageProperty("keywords", "купить косметику");
 
 $APPLICATION->SetTitle("Корейская косметика для очищения, ухода и макияжа");?><?$APPLICATION->IncludeComponent(
-	"bitrix:catalog",
-	"catalog_ito_15", 
+	"your:catalog",
+	"catalog",
 	array(
 		"IBLOCK_TYPE" => "aspro_kshop_catalog",
 		"IBLOCK_ID" => "11",

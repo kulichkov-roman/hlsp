@@ -1,8 +1,9 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+<?
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetPageProperty("keywords", "купить косметику");
 $APPLICATION->SetTitle("Корейская косметика для очищения, ухода и макияжа");?><?$APPLICATION->IncludeComponent(
-	"bitrix:catalog",
-	"catalog_ito_15",
+	"your:catalog",
+	"catalog",
 	Array(
 		"IBLOCK_TYPE" => "aspro_kshop_catalog",
 		"IBLOCK_ID" => "11",
@@ -173,5 +174,6 @@ $APPLICATION->SetTitle("Корейская косметика для очище�
 		"VARIABLE_ALIASES" => Array(
 		)
 	)
-);?> <br>
- <br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);
+?>
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

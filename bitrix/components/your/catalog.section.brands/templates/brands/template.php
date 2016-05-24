@@ -1,9 +1,5 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?><?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
 
-<?
-echo "<pre>"; var_dump(1111); echo "</pre>";
-?>
-
 <?if( count( $arResult["ITEMS"] ) >= 1 ){?>
 	<div class="catalog_block">	
 		<?foreach($arResult["ITEMS"] as $arItem){
