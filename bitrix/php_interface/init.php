@@ -1,4 +1,9 @@
 <?
+/**
+ * Подлючение YourTools
+ *
+ * @author https://github.com/kulichkov-roman
+ */
 require_once 'vendor/YourTools/bootstrap.php';
 require_once 'classes/AutoLoader.php';
 
@@ -13,8 +18,8 @@ foreach ($environment->getConfigFileNames() as $fileName) {
 		include_once $fileName;
 	}
 }
+//include($_SERVER["DOCUMENT_ROOT"]."/seo.php");
 
-//include($_SERVER["DOCUMENT_ROOT"]."/seo.php");?><?
 // подключение переризатора
 CModule::IncludeModule('itconstruct.uncachedarea');
 
@@ -47,9 +52,6 @@ function Subscrible($ID, $arFields)
         $idsubrscr = $subscr->Add($arFields, SITE_ID);                              
     }
 }
-
-
-
 
 //AddEventHandler("main", "OnBeforeUserRegister", Array("Handlers", "OnBeforeUserRegisterHandler"));
 AddEventHandler("main", "OnBeforeUserAdd", Array("Handlers", "OnBeforeUserAddHandler"));
