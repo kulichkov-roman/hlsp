@@ -73,7 +73,7 @@ class CreateSeoSubsectionsIBlockMigration extends AbstractIBlockMigration
     {
         $logger = new \Your\Tools\Logger\EchoLogger();
 
-        $this->deleteIBlock($environment->get('interiorIBlockId'));
+        $this->deleteIBlock($environment->get('seoSubsectionsIBlock'));
 
         $logger->log(sprintf('IBlock interiorMain has been removed. Id: "%s"', $this->iblockId));
     }

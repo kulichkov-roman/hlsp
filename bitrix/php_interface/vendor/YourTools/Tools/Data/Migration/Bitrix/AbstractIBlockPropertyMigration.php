@@ -203,11 +203,11 @@ abstract class AbstractIBlockPropertyMigration implements MigrationInterface
 	 */
 	protected function createLinkProperty($name, $code, array $arFields = array(), $iBlockId = null)
 	{
-		$arFields['PROPERTY_TYPE'] = 'E';
+		if($arFields['PROPERTY_TYPE'])
+			$arFields['PROPERTY_TYPE'] = 'E';
 
-		if ($iBlockId) {
+		if ($iBlockId)
 			$arFields['LINK_IBLOCK_ID'] = $iBlockId;
-		}
 
 		$this->createProperty($name, $code, $arFields);
 	}

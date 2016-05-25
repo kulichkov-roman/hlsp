@@ -6,7 +6,8 @@
 	new \Your\Environment\Configuration\CommonConfiguration(
 		array(
 			'brandIBlock'    => 4,
-			'seoSubsections' => 16,
+			'seoSubsectionsIBlock' => 16,
+			'catalogIBlock'        => 11,
 		)
 	)
 );

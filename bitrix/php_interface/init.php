@@ -1,6 +1,6 @@
 <?
 /**
- * Подлючение YourTools
+ * Подключение YourTools
  *
  * @author https://github.com/kulichkov-roman
  */
