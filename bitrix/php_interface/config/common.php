@@ -5,7 +5,8 @@
 \Your\Environment\EnvironmentManager::getInstance()->addConfig(
 	new \Your\Environment\Configuration\CommonConfiguration(
 		array(
-			'brandIBlock' => 4,
+			'brandIBlock'    => 4,
+			'seoSubsections' => 16,
 		)
 	)
 );
