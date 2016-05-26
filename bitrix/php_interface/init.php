@@ -68,100 +68,105 @@ class Handlers {
   }
 }
 
-
 function getSeoDataCatalog()
 {
-      $code = current(explode("?",$_SERVER["REQUEST_URI"]));
-      $codeCache = 'seodata_'.substr(str_replace(array("/","\\",' ',"_"),'-',$code),1);
+	$code = current(explode("?", $_SERVER["REQUEST_URI"]));
+	$codeCache = 'seodata_' . substr(
+			str_replace(array("/", "\\", ' ', "_"), '-', $code), 1
+		);
 
-	  $cache = new iCache($codeCache,9999999);
+	$cache = new iCache($codeCache, 9999999);
 
-	  if(!($SEO_DATA = $cache->getCache()))
-	  {
-	     CModule::IncludeModule("iblock");
+	if (!($SEO_DATA = $cache->getCache())) {
+		CModule::IncludeModule("iblock");
 
-	      $arSelect = Array();
-	      $arFilter = Array(
-			'IBLOCK_ID' =>14,
-			'CODE'      =>$code,
-			"ACTIVE"    =>"Y"
-		  );
-	      $res = CIBlockElement::GetList(Array(), $arFilter, false, array("nTopCount"=>1), array('ID'));
-	      if($ob = $res->GetNext())
-	      {
-	            $arFilter = Array('ID'=>$ob['ID'],'IBLOCK_ID' =>14);
-	            $res = CIBlockElement::GetList(Array('left_margin' => 'asc' ), $arFilter, false, array("nTopCount"=>1));
-	            if($ob = $res->GetNextElement())
-	            {
-	                  $tmpArr=$ob->GetFields();
-	                  $data = $tmpArr+array("PROP" => $ob->GetProperties());
-					  //$cache->SetCache($SEO_DATA);
-                      $FILTERS = array();
+		$arSelect = Array();
+		$arFilter = Array(
+			'IBLOCK_ID' => 14,
+			'CODE'      => $code,
+			"ACTIVE"    => "Y"
+		);
+		$res = CIBlockElement::GetList(
+			Array(), $arFilter, false, array("nTopCount" => 1), array('ID')
+		);
+		if ($ob = $res->GetNext()) {
+			$arFilter = Array('ID' => $ob['ID'], 'IBLOCK_ID' => 14);
+			$res = CIBlockElement::GetList(
+				Array('left_margin' => 'asc'), $arFilter, false,
+				array("nTopCount" => 1)
+			);
+			if ($ob = $res->GetNextElement()) {
+				$tmpArr = $ob->GetFields();
+				$data = $tmpArr + array("PROP" => $ob->GetProperties());
+				//$cache->SetCache($SEO_DATA);
+				$FILTERS = array();
 
-                      if(!empty($data['PROP']['ELEMENTS']['VALUE']))
-					  {
-                         $FILTERS['ID'] =  $data['PROP']['ELEMENTS']['VALUE'];
-					  }
+				if (!empty($data['PROP']['ELEMENTS']['VALUE'])) {
+					$FILTERS['ID'] = $data['PROP']['ELEMENTS']['VALUE'];
+				}
 
-                      if(!empty($data['PROP']['FILTERS']['VALUE']))
-					  {
-                         foreach($data['PROP']['FILTERS']['VALUE'] as $key=>$value)
-						 {
-						    $filed = $data['PROP']['FILTERS']['DESCRIPTION'][$key];
+				if (!empty($data['PROP']['FILTERS']['VALUE'])) {
+					foreach (
+						$data['PROP']['FILTERS']['VALUE'] as $key => $value
+					) {
+						$filed = $data['PROP']['FILTERS']['DESCRIPTION'][$key];
 
-                         	if(!empty($filed))
-							{
-								$tmp = explode(",",trim($value));
-								if(count($tmp))
-                                    foreach($tmp as $v)
-                                    {
-                                        $v = trim($v);
-										if(strlen($v) >0)
-											$FILTERS[$filed][] = $v;
-                                    }
+						if (!empty($filed)) {
+							$tmp = explode(",", trim($value));
+							if (count($tmp)) {
+								foreach ($tmp as $v) {
+									$v = trim($v);
+									if (strlen($v) > 0) {
+										$FILTERS[$filed][] = $v;
+									}
+								}
 							}
-						 }
-					  }
+						}
+					}
+				}
 
-					  if(!empty($FILTERS))
-					  	$SEO_DATA['filters'] = $FILTERS;
+				if (!empty($FILTERS)) {
+					$SEO_DATA['filters'] = $FILTERS;
+				}
 
-					  $BREADCRUMBS = array();
-					  if(!empty($data['PROP']['BREADCRUMBS']['VALUE']))
-					  {
-                         foreach($data['PROP']['BREADCRUMBS']['VALUE'] as $key=>$value)
-						 {
-                             $url = $data['PROP']['BREADCRUMBS']['DESCRIPTION'][$key];
-							 $text = trim($value);
-							 if(!empty($value))
-                             $BREADCRUMBS[] = array($text,$url);
-						 }
-					  }
+				$BREADCRUMBS = array();
+				if (!empty($data['PROP']['BREADCRUMBS']['VALUE'])) {
+					foreach (
+						$data['PROP']['BREADCRUMBS']['VALUE'] as $key => $value
+					) {
+						$url
+							= $data['PROP']['BREADCRUMBS']['DESCRIPTION'][$key];
+						$text = trim($value);
+						if (!empty($value)) {
+							$BREADCRUMBS[] = array($text, $url);
+						}
+					}
+				}
 
-					  if(!empty($BREADCRUMBS))
-					  		$SEO_DATA['breadcrumbs'] = $BREADCRUMBS;
+				if (!empty($BREADCRUMBS)) {
+					$SEO_DATA['breadcrumbs'] = $BREADCRUMBS;
+				}
 
-                      $seoMetaKey = array('H1','TITLE','KEYWORDS','DESCRIPTION');
-					  foreach($seoMetaKey as $code)
-					  {
-						  if(!empty($data['PROP'][$code]['VALUE']))
-						  {
-	                           $SEO_DATA['seo_meta'][$code] = trim($data['PROP'][$code]['VALUE']);
-						  }
-					  }
+				$seoMetaKey = array('H1', 'TITLE', 'KEYWORDS', 'DESCRIPTION');
+				foreach ($seoMetaKey as $code) {
+					if (!empty($data['PROP'][$code]['VALUE'])) {
+						$SEO_DATA['seo_meta'][$code] = trim(
+							$data['PROP'][$code]['VALUE']
+						);
+					}
+				}
 
-                      if($tmpArr['PREVIEW_TEXT'])
-					  {
-                         $SEO_DATA['SEO_TEXT'] = $tmpArr['PREVIEW_TEXT'];
-					  }
-	            }
+				if ($tmpArr['PREVIEW_TEXT']) {
+					$SEO_DATA['SEO_TEXT'] = $tmpArr['PREVIEW_TEXT'];
+				}
+			}
 
-				$cache->SetCache($SEO_DATA);
-	      }
-		  //echo '<pre>'.print_r($FILTERS,1).'</pre>'.__FILE__.' # '.__LINE__;
-	  }
+			$cache->SetCache($SEO_DATA);
+		}
+		//echo '<pre>'.print_r($FILTERS,1).'</pre>'.__FILE__.' # '.__LINE__;
+	}
 
-	  return $SEO_DATA;
+	return $SEO_DATA;
 }
 
 

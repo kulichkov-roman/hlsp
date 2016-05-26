@@ -1,37 +1,57 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();?>
 <?
-$arParams["ADD_SECTIONS_CHAIN"] = (isset($arParams["ADD_SECTIONS_CHAIN"]) ? $arParams["ADD_SECTIONS_CHAIN"] : "Y");
+$arParams["ADD_SECTIONS_CHAIN"] = (isset($arParams["ADD_SECTIONS_CHAIN"])
+    ? $arParams["ADD_SECTIONS_CHAIN"] : "Y");
 
 CModule::IncludeModule("iblock");
 $arPageParams = $arSection = $section = array();
-if($arResult["VARIABLES"]["SECTION_ID"] > 0){
-    $db_list = CIBlockSection::GetList(array(), array('GLOBAL_ACTIVE' => 'Y', "ID" => $arResult["VARIABLES"]["SECTION_ID"]), true, array("ID", "NAME", $arParams["SECTION_DISPLAY_PROPERTY"], $arParams["LIST_BROWSER_TITLE"], $arParams["LIST_META_KEYWORDS"], $arParams["LIST_META_DESCRIPTION"], $arParams["SECTION_PREVIEW_PROPERTY"], "IBLOCK_SECTION_ID"));
+if ($arResult["VARIABLES"]["SECTION_ID"] > 0) {
+    $db_list = CIBlockSection::GetList(
+        array(), array('GLOBAL_ACTIVE' => 'Y',
+                       "ID"            => $arResult["VARIABLES"]["SECTION_ID"]),
+        true, array("ID", "NAME", $arParams["SECTION_DISPLAY_PROPERTY"],
+                    $arParams["LIST_BROWSER_TITLE"],
+                    $arParams["LIST_META_KEYWORDS"],
+                    $arParams["LIST_META_DESCRIPTION"],
+                    $arParams["SECTION_PREVIEW_PROPERTY"], "IBLOCK_SECTION_ID")
+    );
     $section = $db_list->GetNext();
-}
-elseif(strlen(trim($arResult["VARIABLES"]["SECTION_CODE"])) > 0){
-    $db_list = CIBlockSection::GetList(array(), array('GLOBAL_ACTIVE' => 'Y', "=CODE" => $arResult["VARIABLES"]["SECTION_CODE"]), true, array("ID", "NAME", $arParams["SECTION_DISPLAY_PROPERTY"], $arParams["LIST_BROWSER_TITLE"], $arParams["LIST_META_KEYWORDS"], $arParams["LIST_META_DESCRIPTION"], $arParams["SECTION_PREVIEW_PROPERTY"], "IBLOCK_SECTION_ID"));
+} elseif (strlen(trim($arResult["VARIABLES"]["SECTION_CODE"])) > 0) {
+    $db_list = CIBlockSection::GetList(
+        array(), array('GLOBAL_ACTIVE' => 'Y',
+                       "=CODE"         => $arResult["VARIABLES"]["SECTION_CODE"]),
+        true, array("ID", "NAME", $arParams["SECTION_DISPLAY_PROPERTY"],
+                    $arParams["LIST_BROWSER_TITLE"],
+                    $arParams["LIST_META_KEYWORDS"],
+                    $arParams["LIST_META_DESCRIPTION"],
+                    $arParams["SECTION_PREVIEW_PROPERTY"], "IBLOCK_SECTION_ID")
+    );
     $section = $db_list->GetNext();
 }
 
-if($section){
+if ($section) {
     $arSection["ID"] = $section["ID"];
     $arSection["NAME"] = $section["NAME"];
     $arSection["IBLOCK_SECTION_ID"] = $section["IBLOCK_SECTION_ID"];
-    if($section[$arParams["SECTION_DISPLAY_PROPERTY"]]){
-        $arDisplayRes = CUserFieldEnum::GetList(array(), array("ID" => $section[$arParams["SECTION_DISPLAY_PROPERTY"]]));
-        if($arDisplay = $arDisplayRes->GetNext()){
+    if ($section[$arParams["SECTION_DISPLAY_PROPERTY"]]) {
+        $arDisplayRes = CUserFieldEnum::GetList(
+            array(),
+            array("ID" => $section[$arParams["SECTION_DISPLAY_PROPERTY"]])
+        );
+        if ($arDisplay = $arDisplayRes->GetNext()) {
             $arSection["DISPLAY"] = $arDisplay["XML_ID"];
         }
     }
-    $arSection["SEO_DESCRIPTION"] = $section[$arParams["SECTION_PREVIEW_PROPERTY"]];
+    $arSection["SEO_DESCRIPTION"]
+        = $section[$arParams["SECTION_PREVIEW_PROPERTY"]];
     $arPageParams["title"] = $section[$arParams["LIST_BROWSER_TITLE"]];
     $arPageParams["keywords"] = $section[$arParams["LIST_META_KEYWORDS"]];
     $arPageParams["description"] = $section[$arParams["LIST_META_DESCRIPTION"]];
 }
 
-if($arPageParams){
-    foreach($arPageParams as $code => $value){
-        if($value){
+if ($arPageParams) {
+    foreach ($arPageParams as $code => $value) {
+        if ($value) {
             $APPLICATION->SetPageProperty($code, $value);
         }
     }
@@ -40,33 +60,40 @@ if($arPageParams){
 global $KShopSectionID;
 $KShopSectionID = $arSection["ID"];
 
-$ipropValues = new \Bitrix\Iblock\InheritedProperty\SectionValues($arParams["IBLOCK_ID"], IntVal($arResult["VARIABLES"]["SECTION_ID"]));
+$ipropValues = new \Bitrix\Iblock\InheritedProperty\SectionValues(
+    $arParams["IBLOCK_ID"], IntVal($arResult["VARIABLES"]["SECTION_ID"])
+);
 $values = $ipropValues->getValues();
-$ishop_page_title = $values['SECTION_META_TITLE'] ? $values['SECTION_META_TITLE'] : $arSection["NAME"];
-$ishop_page_h1 = $values['SECTION_PAGE_TITLE'] ? $values['SECTION_PAGE_TITLE'] : $arSection["NAME"];
-if($ishop_page_h1){
+$ishop_page_title = $values['SECTION_META_TITLE']
+    ? $values['SECTION_META_TITLE'] : $arSection["NAME"];
+$ishop_page_h1 = $values['SECTION_PAGE_TITLE'] ? $values['SECTION_PAGE_TITLE']
+    : $arSection["NAME"];
+if ($ishop_page_h1) {
     $APPLICATION->SetTitle($ishop_page_h1);
-}
-else{
+} else {
     $APPLICATION->SetTitle($arSection["NAME"]);
 }
-if($ishop_page_title){
+if ($ishop_page_title) {
     $APPLICATION->SetPageProperty("title", $ishop_page_title);
 }
-if($values['SECTION_META_DESCRIPTION']){
-    $APPLICATION->SetPageProperty("description", $values['SECTION_META_DESCRIPTION']);
+if ($values['SECTION_META_DESCRIPTION']) {
+    $APPLICATION->SetPageProperty(
+        "description", $values['SECTION_META_DESCRIPTION']
+    );
 }
-if($values['SECTION_META_KEYWORDS']){
+if ($values['SECTION_META_KEYWORDS']) {
     $APPLICATION->SetPageProperty("keywords", $values['SECTION_META_KEYWORDS']);
 }
-$iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y"));
+$iSectionsCount = CIBlockSection::GetCount(
+    array("SECTION_ID" => $arSection["ID"], "ACTIVE" => "Y",
+          "GLOBAL_ACTIVE" => "Y")
+);
 ?>
 <?if($iSectionsCount > 0):?>
     <script type="text/javascript" src="/js/jquery.main.js"></script>
     <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="/js/jquery.accordion.js"></script>
     <script src="/js/jquery01.js" type="text/javascript"></script>
-
     <style>
         ul li::before {
             content: ""!important;
@@ -77,9 +104,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             color: #fff;
         }
     </style>
-
     <div class="container">
-
         <div class="sidebar">
             <?$APPLICATION->IncludeComponent(
                 "bitrix:catalog.section.list",
@@ -102,7 +127,6 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                 $component
             );?>
         </div>
-
         <div class="content">
             <?
             global $APPLICATION, $USER, $arrSeoFilter;
@@ -212,6 +236,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             }
 
             $SEO_DATA = getSeoDataCatalog();
+
             if($SEO_DATA)
             {
                 CHTTP::SetStatus("200 OK");
@@ -239,7 +264,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             }
             if(strlen($SEO_DATA['SEO_TEXT']))
             {
-                if(intval($_GET['PAGEN_1'])<=0 )
+                if(intval($_GET['PAGEN_1'])<=0)
                     $description = $SEO_DATA['SEO_TEXT'];
             }
             ?>
@@ -249,88 +274,88 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                     <?=$description?>
                 </div>
             </div>
-            <?
-            $APPLICATION->IncludeComponent(
-                "your:catalog.section.brands",
-                "brands",
+            <?$APPLICATION->IncludeComponent(
+                'your:catalog.section.subsections',
+                'subsections',
                 Array(
-                    "SEF_URL_TEMPLATES" => $arParams["SEF_URL_TEMPLATES"],
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "ELEMENT_SORT_FIELD" => $sort,
-                    "ELEMENT_SORT_ORDER" => $sort_order,
-                    "FILTER_NAME" => $arParams["FILTER_NAME"],
-                    "USE_FILTER" => "Y",
-                    "INCLUDE_SUBSECTIONS" => $arParams["INCLUDE_SUBSECTIONS"],
-                    "PAGE_ELEMENT_COUNT" => $show,
-                    "LINE_ELEMENT_COUNT" => $arParams["LINE_ELEMENT_COUNT"],
-                    "PROPERTY_CODE" => $arParams["LIST_PROPERTY_CODE"],
-                    "OFFERS_FIELD_CODE" => $arParams["LIST_OFFERS_FIELD_CODE"],
-                    "OFFERS_PROPERTY_CODE" => $arParams["LIST_OFFERS_PROPERTY_CODE"],
-                    "OFFERS_SORT_FIELD" => $arParams["OFFERS_SORT_FIELD"],
-                    "OFFERS_SORT_ORDER" => $arParams["OFFERS_SORT_ORDER"],
-                    "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-                    "DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["element"],
-                    "BASKET_URL" => $arParams["BASKET_URL"],
-                    "ACTION_VARIABLE" => $arParams["ACTION_VARIABLE"],
-                    "PRODUCT_ID_VARIABLE" => $arParams["PRODUCT_ID_VARIABLE"],
-                    "PRODUCT_QUANTITY_VARIABLE" => "quantity",
-                    "PRODUCT_PROPS_VARIABLE" => "prop",
-                    "SECTION_ID_VARIABLE" => $arParams["SECTION_ID_VARIABLE"],
-                    "AJAX_MODE" => $arParams["AJAX_MODE"],
-                    "AJAX_OPTION_JUMP" => $arParams["AJAX_OPTION_JUMP"],
-                    "AJAX_OPTION_STYLE" => $arParams["AJAX_OPTION_STYLE"],
-                    "AJAX_OPTION_HISTORY" => $arParams["AJAX_OPTION_HISTORY"],
-                    "CACHE_TYPE" =>$arParams["CACHE_TYPE"],
-                    "CACHE_TIME" => $arParams["CACHE_TIME"],
-                    "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-                    "META_KEYWORDS" => $arParams["LIST_META_KEYWORDS"],
-                    "META_DESCRIPTION" => $arParams["LIST_META_DESCRIPTION"],
-                    "BROWSER_TITLE" => $arParams["LIST_BROWSER_TITLE"],
-                    "ADD_SECTIONS_CHAIN" => "N",
-                    "HIDE_NOT_AVAILABLE" => $arParams["HIDE_NOT_AVAILABLE"],
-                    "DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
-                    "SET_TITLE" => $arParams["SET_TITLE"],
-                    "SET_STATUS_404" => $arParams["SET_STATUS_404"],
-                    "CACHE_FILTER" => $arParams["CACHE_FILTER"],
-                    "PRICE_CODE" => $arParams["PRICE_CODE"],
-                    "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
-                    "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
-                    "PRICE_VAT_INCLUDE" => $arParams["PRICE_VAT_INCLUDE"],
-                    "USE_PRODUCT_QUANTITY" => $arParams["USE_PRODUCT_QUANTITY"],
-                    "OFFERS_CART_PROPERTIES" => array(),
-                    "DISPLAY_TOP_PAGER" => $arParams["DISPLAY_TOP_PAGER"],
-                    "DISPLAY_BOTTOM_PAGER" => $arParams["DISPLAY_BOTTOM_PAGER"],
-                    "PAGER_TITLE" => $arParams["PAGER_TITLE"],
-                    "PAGER_SHOW_ALWAYS" => $arParams["PAGER_SHOW_ALWAYS"],
-                    "PAGER_TEMPLATE" => $arParams["PAGER_TEMPLATE"],
-                    "PAGER_DESC_NUMBERING" => $arParams["PAGER_DESC_NUMBERING"],
-                    "PAGER_DESC_NUMBERING_CACHE_TIME" => $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"],
-                    "PAGER_SHOW_ALL" => $arParams["PAGER_SHOW_ALL"],
-                    "AJAX_OPTION_ADDITIONAL" => "",
-                    "ADD_CHAIN_ITEM" => "N",
-                    "SHOW_QUANTITY" => $arParams["SHOW_QUANTITY"],
-                    "SHOW_QUANTITY_COUNT" => $arParams["SHOW_QUANTITY_COUNT"],
-                    "CONVERT_CURRENCY" => $arParams["CONVERT_CURRENCY"],
-                    "CURRENCY_ID" => $arParams["CURRENCY_ID"],
-                    "USE_STORE" => $arParams["USE_STORE"],
-                    "MAX_AMOUNT" => $arParams["MAX_AMOUNT"],
-                    "MIN_AMOUNT" => $arParams["MIN_AMOUNT"],
-                    "USE_MIN_AMOUNT" => $arParams["USE_MIN_AMOUNT"],
-                    "USE_ONLY_MAX_AMOUNT" => $arParams["USE_ONLY_MAX_AMOUNT"],
-                    "DISPLAY_WISH_BUTTONS" => $arParams["DISPLAY_WISH_BUTTONS"],
-                    "DEFAULT_COUNT" => $arParams["DEFAULT_COUNT"],
-                    "LIST_DISPLAY_POPUP_IMAGE" => $arParams["LIST_DISPLAY_POPUP_IMAGE"],
-                    "SHOW_MEASURE" => $arParams["SHOW_MEASURE"],
-                    "SHOW_HINTS" => $arParams["SHOW_HINTS"],
-                    "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
-                    "SECTIONS_LIST_PREVIEW_PROPERTY" => $arParams["SECTIONS_LIST_PREVIEW_PROPERTY"],
-                    "SHOW_SECTION_LIST_PICTURES" => $arParams["SHOW_SECTION_LIST_PICTURES"],
-                    "BRAND_ID" => "233",
-                ), $component
-            );?>
+                    'SEF_URL_TEMPLATES' => $arParams['SEF_URL_TEMPLATES'],
+                    'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
+                    'IBLOCK_ID' => $arParams['IBLOCK_ID'],
+                    'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
+                    'SECTION_CODE' => $arResult['VARIABLES']['SECTION_CODE'],
+                    'ELEMENT_SORT_FIELD' => $sort,
+                    'ELEMENT_SORT_ORDER' => $sort_order,
+                    'FILTER_NAME' => $arParams['FILTER_NAME'],
+                    'INCLUDE_SUBSECTIONS' => $arParams['INCLUDE_SUBSECTIONS'],
+                    'PAGE_ELEMENT_COUNT' => $show,
+                    'LINE_ELEMENT_COUNT' => $arParams['LINE_ELEMENT_COUNT'],
+                    'PROPERTY_CODE' => $arParams['LIST_PROPERTY_CODE'],
+                    'OFFERS_FIELD_CODE' => $arParams['LIST_OFFERS_FIELD_CODE'],
+                    'OFFERS_PROPERTY_CODE' => $arParams['LIST_OFFERS_PROPERTY_CODE'],
+                    'OFFERS_SORT_FIELD' => $arParams['OFFERS_SORT_FIELD'],
+                    'OFFERS_SORT_ORDER' => $arParams['OFFERS_SORT_ORDER'],
+                    'SECTION_URL' => $arResult['FOLDER'].$arResult['URL_TEMPLATES']['section'],
+                    'DETAIL_URL' => $arResult['FOLDER'].$arResult['URL_TEMPLATES']['element'],
+                    'BASKET_URL' => $arParams['BASKET_URL'],
+                    'ACTION_VARIABLE' => $arParams['ACTION_VARIABLE'],
+                    'PRODUCT_ID_VARIABLE' => $arParams['PRODUCT_ID_VARIABLE'],
+                    'PRODUCT_QUANTITY_VARIABLE' => 'quantity',
+                    'PRODUCT_PROPS_VARIABLE' => 'prop',
+                    'SECTION_ID_VARIABLE' => $arParams['SECTION_ID_VARIABLE'],
+                    'AJAX_MODE' => $arParams['AJAX_MODE'],
+                    'AJAX_OPTION_JUMP' => $arParams['AJAX_OPTION_JUMP'],
+                    'AJAX_OPTION_STYLE' => $arParams['AJAX_OPTION_STYLE'],
+                    'AJAX_OPTION_HISTORY' => $arParams['AJAX_OPTION_HISTORY'],
+                    'CACHE_TYPE' =>$arParams['CACHE_TYPE'],
+                    'CACHE_TIME' => $arParams['CACHE_TIME'],
+                    'CACHE_GROUPS' => $arParams['CACHE_GROUPS'],
+                    'META_KEYWORDS' => $arParams['LIST_META_KEYWORDS'],
+                    'META_DESCRIPTION' => $arParams['LIST_META_DESCRIPTION'],
+                    'BROWSER_TITLE' => $arParams['LIST_BROWSER_TITLE'],
+                    'ADD_SECTIONS_CHAIN' => $arParams['ADD_SECTIONS_CHAIN'],
+                    'HIDE_NOT_AVAILABLE' => $arParams['HIDE_NOT_AVAILABLE'],
+                    'DISPLAY_COMPARE' => $arParams['USE_COMPARE'],
+                    'SET_TITLE' => $arParams['SET_TITLE'],
+                    'SET_STATUS_404' => $arParams['SET_STATUS_404'],
+                    'CACHE_FILTER' => $arParams['CACHE_FILTER'],
+                    'PRICE_CODE' => $arParams['PRICE_CODE'],
+                    'USE_PRICE_COUNT' => $arParams['USE_PRICE_COUNT'],
+                    'SHOW_PRICE_COUNT' => $arParams['SHOW_PRICE_COUNT'],
+                    'PRICE_VAT_INCLUDE' => $arParams['PRICE_VAT_INCLUDE'],
+                    'USE_PRODUCT_QUANTITY' => $arParams['USE_PRODUCT_QUANTITY'],
+                    'OFFERS_CART_PROPERTIES' => array(),
+                    'DISPLAY_TOP_PAGER' => $arParams['DISPLAY_TOP_PAGER'],
+                    'DISPLAY_BOTTOM_PAGER' => $arParams['DISPLAY_BOTTOM_PAGER'],
+                    'PAGER_TITLE' => $arParams['PAGER_TITLE'],
+                    'PAGER_SHOW_ALWAYS' => $arParams['PAGER_SHOW_ALWAYS'],
+                    'PAGER_TEMPLATE' => $arParams['PAGER_TEMPLATE'],
+                    'PAGER_DESC_NUMBERING' => $arParams['PAGER_DESC_NUMBERING'],
+                    'PAGER_DESC_NUMBERING_CACHE_TIME' => $arParams['PAGER_DESC_NUMBERING_CACHE_TIME'],
+                    'PAGER_SHOW_ALL' => $arParams['PAGER_SHOW_ALL'],
+                    'AJAX_OPTION_ADDITIONAL' => '',
+                    'ADD_CHAIN_ITEM' => 'N',
+                    'SHOW_QUANTITY' => $arParams['SHOW_QUANTITY'],
+                    'SHOW_QUANTITY_COUNT' => $arParams['SHOW_QUANTITY_COUNT'],
+                    'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
+                    'CURRENCY_ID' => $arParams['CURRENCY_ID'],
+                    'USE_STORE' => $arParams['USE_STORE'],
+                    'MAX_AMOUNT' => $arParams['MAX_AMOUNT'],
+                    'MIN_AMOUNT' => $arParams['MIN_AMOUNT'],
+                    'USE_MIN_AMOUNT' => $arParams['USE_MIN_AMOUNT'],
+                    'USE_ONLY_MAX_AMOUNT' => $arParams['USE_ONLY_MAX_AMOUNT'],
+                    'DISPLAY_WISH_BUTTONS' => $arParams['DISPLAY_WISH_BUTTONS'],
+                    'DEFAULT_COUNT' => $arParams['DEFAULT_COUNT'],
+                    'LIST_DISPLAY_POPUP_IMAGE' => $arParams['LIST_DISPLAY_POPUP_IMAGE'],
+                    'SHOW_MEASURE' => $arParams['SHOW_MEASURE'],
+                    'SHOW_HINTS' => $arParams['SHOW_HINTS'],
+                    'SHOW_SECTIONS_LIST_PREVIEW' => $arParams['SHOW_SECTIONS_LIST_PREVIEW'],
+                    'SECTIONS_LIST_PREVIEW_PROPERTY' => $arParams['SECTIONS_LIST_PREVIEW_PROPERTY'],
+                    'SHOW_SECTION_LIST_PICTURES' => $arParams['SHOW_SECTION_LIST_PICTURES'],
+                    'ELEMENTS_IDS' => $arElemIDs,
+                ),
+                $component
+            );
+            ?>
         </div>
     </div>
 <?else:?>
@@ -452,150 +477,10 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
     <div class="compare_small" id="compare_small"></div>
     <div class="right_block clearfix catalog">
         <?
-        /**
-         * По требованию SEO
-         */
-        ?>
-        <div class="content-header">
-            <h1><?$APPLICATION->ShowTitle('getPageTitle');?></h1>
-        </div>
-        <?if('Y' == $arParams['USE_FILTER']):?>
-            <div class="adaptive_filter">
-                <a class="filter_opener<?=($_REQUEST["set_filter"] == "y" ? " active" : "")?>"><i></i><span><?=GetMessage("CATALOG_SMART_FILTER_TITLE")?></span></a>
-            </div>
-            <script type="text/javascript">
-                $(".filter_opener").click(function(){
-                    $(this).toggleClass("opened");
-                    $(".bx_filter_vertical").slideToggle(333);
-                });
-            </script>
-        <?endif;?>
-        <div class="sort_header">
-            <!--noindex-->
-            <?
-            $arDisplays = array("block", "list", "table");
-            if(array_key_exists("display", $_REQUEST) || (array_key_exists("display", $_SESSION)) || $arParams["DEFAULT_LIST_TEMPLATE"]){
-                if($_REQUEST["display"] && (in_array(trim($_REQUEST["display"]), $arDisplays))){
-                    $display = trim($_REQUEST["display"]);
-                    $_SESSION["display"]=trim($_REQUEST["display"]);
-                }
-                elseif($_SESSION["display"] && (in_array(trim($_SESSION["display"]), $arDisplays))){
-                    $display = $_SESSION["display"];
-                }
-                elseif($arSection["DISPLAY"]){
-                    $display = $arSection["DISPLAY"];
-                }
-                else{
-                    $display = $arParams["DEFAULT_LIST_TEMPLATE"];
-                }
-            }
-            else{
-                $display = "block";
-            }
-            $template = "catalog_".$display;
-            ?>
-            <div class="sort_filter">
-                <?
-                $arAvailableSort = array();
-                $arSorts = $arParams["SORT_BUTTONS"];
-                if(in_array("POPULARITY", $arSorts)){
-                    $arAvailableSort["SHOWS"] = array("SHOWS", "desc");
-                }
-                if(in_array("NAME", $arSorts)){
-                    $arAvailableSort["NAME"] = array("NAME", "asc");
-                }
-                if(in_array("PRICE", $arSorts)){
-                    $arSortPrices = $arParams["SORT_PRICES"];
-                    if($arSortPrices == "MINIMUM_PRICE" || $arSortPrices == "MAXIMUM_PRICE"){
-                        $arAvailableSort["PRICE"] = array("PROPERTY_".$arSortPrices, "desc");
-                    }
-                    else{
-                        $price = CCatalogGroup::GetList(array(), array("NAME" => $arParams["SORT_PRICES"]), false, false, array("ID", "NAME"))->GetNext();
-                        $arAvailableSort["PRICE"] = array("CATALOG_PRICE_".$price["ID"], "desc");
-                    }
-                }
-                if(in_array("QUANTITY", $arSorts)){
-                    $arAvailableSort["QUANTITY"] = array("QUANTITY", "desc");
-                }
-
-                $sort = "SHOWS";
-                if((array_key_exists("sort", $_REQUEST) && array_key_exists(ToUpper($_REQUEST["sort"]), $arAvailableSort)) || (array_key_exists("sort", $_SESSION) && array_key_exists(ToUpper($_SESSION["sort"]), $arAvailableSort)) || $arParams["ELEMENT_SORT_FIELD"]){
-                    if($_REQUEST["sort"]){
-                        $sort = ToUpper($_REQUEST["sort"]);
-                        $_SESSION["sort"] = ToUpper($_REQUEST["sort"]);
-                    }
-                    elseif($_SESSION["sort"]){
-                        $sort = ToUpper($_SESSION["sort"]);
-                    }
-                    else{
-                        $sort = ToUpper($arParams["ELEMENT_SORT_FIELD"]);
-                    }
-                }
-
-                $sort_order=$arAvailableSort[$sort][1];
-                if((array_key_exists("order", $_REQUEST) && in_array(ToLower($_REQUEST["order"]), Array("asc", "desc"))) || (array_key_exists("order", $_REQUEST) && in_array(ToLower($_REQUEST["order"]), Array("asc", "desc")) ) || $arParams["ELEMENT_SORT_ORDER"]){
-                    if($_REQUEST["order"]){
-                        $sort_order = $_REQUEST["order"];
-                        $_SESSION["order"] = $_REQUEST["order"];
-                    }
-                    elseif($_SESSION["order"]){
-                        $sort_order = $_SESSION["order"];
-                    }
-                    else{
-                        $sort_order = ToLower($arParams["ELEMENT_SORT_ORDER"]);
-                    }
-                }
-                ?>
-                <script>
-                    $(document).ready(function(){
-                        $(".js_link__rep").each(
-                            function()
-                            {
-                                $(this).replaceWith('<a class="'+$(this).data("class")+'" href="'+$(this).data("href")+'" rel="nofollow">'+$(this).html()+'</a>');
-                            }
-                        );
-                    });
-                </script>
-                <?foreach($arAvailableSort as $key => $val):?>
-                    <?$newSort = $sort_order == 'desc' ? 'asc' : 'desc';?>
-                    <span data-class="sort_btn <?=($sort == $key ? 'current' : '')?> <?=$sort_order?> <?=$key?>" data-href="<?=$APPLICATION->GetCurPageParam('sort='.$key.'&order='.$newSort, 	array('sort', 'order'))?>" class="js_link__rep">
-					    <i class="icon"></i><span><?=GetMessage('SECT_SORT_'.$key)?></span><i class="arr"></i>
-					</span>
-                <?endforeach;?>
-                <?
-                if($sort == "PRICE")
-                {
-                    $sort = $arAvailableSort["PRICE"][0];
-                }
-                if($sort == "QUANTITY")
-                {
-                    $sort = "CATALOG_QUANTITY";
-                }
-                ?>
-            </div>
-            <div class="sort_display">
-                <?foreach($arDisplays as $displayType):?>
-                    <span rel="nofollow" data-href="<?=$APPLICATION->GetCurPageParam('display='.$displayType, 	array('display'))?>" data-class="sort_btn <?=$displayType?> <?=($display == $displayType ? 'current' : '')?>" class="js_link__rep">
-					    <i title="<?=GetMessage("SECT_DISPLAY_".strtoupper($displayType))?>"></i>
-					</span>
-                <?endforeach;?>
-            </div>
-            <!--/noindex-->
-        </div>
-        <?
-        $show = $arParams["PAGE_ELEMENT_COUNT"];
-        if(array_key_exists("show", $_REQUEST)){
-            if(intVal($_REQUEST["show"]) && in_array(intVal($_REQUEST["show"]), array(20, 40, 60, 80, 100))){
-                $show = intVal($_REQUEST["show"]); $_SESSION["show"] = $show;
-            }
-            elseif($_SESSION["show"]){
-                $show=intVal($_SESSION["show"]);
-            }
-        }
-
         $environment = \Your\Environment\EnvironmentManager::getInstance();
 
         $arSubSec = array();
+        $arSubSecItem = array();
         if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         {
             $arSortSubSec = array(
@@ -652,7 +537,158 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                 }
             }
         }
+        ?>
+        <div class="content-header">
+            <h1><?=$arSubSecItem['NAME']?></h1>
+        </div>
+        <?if('Y' == $arParams['USE_FILTER']):?>
+            <div class="adaptive_filter">
+                <a class="filter_opener<?=($_REQUEST["set_filter"] == "y" ? " active" : "")?>"><i></i><span><?=GetMessage("CATALOG_SMART_FILTER_TITLE")?></span></a>
+            </div>
+            <script type="text/javascript">
+                $(".filter_opener").click(function(){
+                    $(this).toggleClass("opened");
+                    $(".bx_filter_vertical").slideToggle(333);
+                });
+            </script>
+        <?endif;?>
+        <div class="sort_header">
+            <!--noindex-->
+            <?
+            $arDisplays = array("block", "list", "table");
+            if(array_key_exists("display", $_REQUEST) || (array_key_exists("display", $_SESSION)) || $arParams["DEFAULT_LIST_TEMPLATE"])
+            {
+                if($_REQUEST["display"] && (in_array(trim($_REQUEST["display"]), $arDisplays)))
+                {
+                    $display = trim($_REQUEST["display"]);
+                    $_SESSION["display"]=trim($_REQUEST["display"]);
+                }
+                elseif($_SESSION["display"] && (in_array(trim($_SESSION["display"]), $arDisplays)))
+                {
+                    $display = $_SESSION["display"];
+                }
+                elseif($arSection["DISPLAY"]){
+                    $display = $arSection["DISPLAY"];
+                }
+                else
+                {
+                    $display = $arParams["DEFAULT_LIST_TEMPLATE"];
+                }
+            }
+            else
+            {
+                $display = "block";
+            }
+            $template = "catalog_".$display;
+            ?>
+            <div class="sort_filter">
+                <?
+                $arAvailableSort = array();
+                $arSorts = $arParams["SORT_BUTTONS"];
+                if(in_array("POPULARITY", $arSorts)){
+                    $arAvailableSort["SHOWS"] = array("SHOWS", "desc");
+                }
+                if(in_array("NAME", $arSorts)){
+                    $arAvailableSort["NAME"] = array("NAME", "asc");
+                }
+                if(in_array("PRICE", $arSorts)){
+                    $arSortPrices = $arParams["SORT_PRICES"];
+                    if($arSortPrices == "MINIMUM_PRICE" || $arSortPrices == "MAXIMUM_PRICE"){
+                        $arAvailableSort["PRICE"] = array("PROPERTY_".$arSortPrices, "desc");
+                    }
+                    else{
+                        $price = CCatalogGroup::GetList(array(), array("NAME" => $arParams["SORT_PRICES"]), false, false, array("ID", "NAME"))->GetNext();
+                        $arAvailableSort["PRICE"] = array("CATALOG_PRICE_".$price["ID"], "desc");
+                    }
+                }
+                if(in_array("QUANTITY", $arSorts)){
+                    $arAvailableSort["QUANTITY"] = array("QUANTITY", "desc");
+                }
 
+                $sort = "SHOWS";
+                if((array_key_exists("sort", $_REQUEST) && array_key_exists(ToUpper($_REQUEST["sort"]), $arAvailableSort)) || (array_key_exists("sort", $_SESSION) && array_key_exists(ToUpper($_SESSION["sort"]), $arAvailableSort)) || $arParams["ELEMENT_SORT_FIELD"]){
+                    if($_REQUEST["sort"])
+                    {
+                        $sort = ToUpper($_REQUEST["sort"]);
+                        $_SESSION["sort"] = ToUpper($_REQUEST["sort"]);
+                    }
+                    elseif($_SESSION["sort"])
+                    {
+                        $sort = ToUpper($_SESSION["sort"]);
+                    }
+                    else
+                    {
+                        $sort = ToUpper($arParams["ELEMENT_SORT_FIELD"]);
+                    }
+                }
+
+                $sort_order=$arAvailableSort[$sort][1];
+                if((array_key_exists("order", $_REQUEST) && in_array(ToLower($_REQUEST["order"]), Array("asc", "desc"))) || (array_key_exists("order", $_REQUEST) && in_array(ToLower($_REQUEST["order"]), Array("asc", "desc")) ) || $arParams["ELEMENT_SORT_ORDER"]){
+                    if($_REQUEST["order"])
+                    {
+                        $sort_order = $_REQUEST["order"];
+                        $_SESSION["order"] = $_REQUEST["order"];
+                    }
+                    elseif($_SESSION["order"])
+                    {
+                        $sort_order = $_SESSION["order"];
+                    }
+                    else
+                    {
+                        $sort_order = ToLower($arParams["ELEMENT_SORT_ORDER"]);
+                    }
+                }
+                ?>
+                <script>
+                    $(document).ready(function(){
+                        $(".js_link__rep").each(
+                            function()
+                            {
+                                $(this).replaceWith('<a class="'+$(this).data("class")+'" href="'+$(this).data("href")+'" rel="nofollow">'+$(this).html()+'</a>');
+                            }
+                        );
+                    });
+                </script>
+                <?foreach($arAvailableSort as $key => $val):?>
+                    <?$newSort = $sort_order == 'desc' ? 'asc' : 'desc';?>
+                    <span data-class="sort_btn <?=($sort == $key ? 'current' : '')?> <?=$sort_order?> <?=$key?>" data-href="<?=$APPLICATION->GetCurPageParam('sort='.$key.'&order='.$newSort, 	array('sort', 'order'))?>" class="js_link__rep">
+					    <i class="icon"></i><span><?=GetMessage('SECT_SORT_'.$key)?></span><i class="arr"></i>
+					</span>
+                <?endforeach;?>
+                <?
+                if($sort == "PRICE")
+                {
+                    $sort = $arAvailableSort["PRICE"][0];
+                }
+                if($sort == "QUANTITY")
+                {
+                    $sort = "CATALOG_QUANTITY";
+                }
+                ?>
+            </div>
+            <div class="sort_display">
+                <?foreach($arDisplays as $displayType):?>
+                    <span rel="nofollow" data-href="<?=$APPLICATION->GetCurPageParam('display='.$displayType, 	array('display'))?>" data-class="sort_btn <?=$displayType?> <?=($display == $displayType ? 'current' : '')?>" class="js_link__rep">
+					    <i title="<?=GetMessage("SECT_DISPLAY_".strtoupper($displayType))?>"></i>
+					</span>
+                <?endforeach;?>
+            </div>
+            <!--/noindex-->
+        </div>
+        <?
+        $show = $arParams["PAGE_ELEMENT_COUNT"];
+        if (array_key_exists("show", $_REQUEST)) {
+            if (intVal($_REQUEST["show"])
+                && in_array(
+                    intVal($_REQUEST["show"]), array(20, 40, 60, 80, 100)
+                )
+            ) {
+                $show = intVal($_REQUEST["show"]);
+                $_SESSION["show"] = $show;
+            } elseif ($_SESSION["show"]) {
+                $show = intVal($_SESSION["show"]);
+            }
+        }
         $APPLICATION->IncludeComponent(
             'your:catalog.section.subsections',
             'subsections',
