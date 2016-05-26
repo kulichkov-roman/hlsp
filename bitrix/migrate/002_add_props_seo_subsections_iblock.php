@@ -50,8 +50,6 @@ class AddPropertiesToSeoSubsectionsIBlockMigration extends AbstractIBlockPropert
 
         $iBlockId = $environment->get('seoSubsectionsIBlock');
 
-        echo "<pre>"; var_dump($iBlockId); echo "</pre>";
-
         parent::__construct($iBlockId);
 
         $this->properties = array(
@@ -68,7 +66,7 @@ class AddPropertiesToSeoSubsectionsIBlockMigration extends AbstractIBlockPropert
         try {
             $this->createLinkProperty(
                 'Привязка к разделам каталога',
-                'LINK_SECTIONS_CAT',
+                'LINK_SECTION_CAT',
                 array(
                     'PROPERTY_TYPE' => 'G'
                 ),
@@ -77,7 +75,7 @@ class AddPropertiesToSeoSubsectionsIBlockMigration extends AbstractIBlockPropert
 
             $this->createLinkProperty(
                 'Привязка к элементам каталога',
-                'LINK_ELEMENT_CAT',
+                'LINK_ELEMENTS_CAT',
                 array(
                     'PROPERTY_TYPE' => 'E',
                     'MULTIPLE' => 'Y'
