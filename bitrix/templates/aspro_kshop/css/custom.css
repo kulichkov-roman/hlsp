@@ -1,0 +1,59 @@
+/*NOTE: This file is intended for programmers. Aspro technical support is not advised to work with him.*/
+
+/* Examples (uncomment to use):*/
+
+/* Expand site width */
+/* body .wrapper { max-width: 1400px !important;  } */
+
+/* Set site background image */
+/* body {  background: url(image_source) top no-repeat; }
+
+/* Hide compare button */
+/* a.compare_item { display: none !important;  }*/
+
+#header .catalog_menu ul.menu > li > a {padding: 0 8px; font-size: 12px;}
+h1 {font-size:24px;}
+.specials_slider .catalog_item .item-title, .catalog_block .catalog_item .item-title, .bx_item_set_hor_item .item_info .item-title, .bx_modal_body .item_wrapp .item-title, .bx_modal_body .bx_kit_item .item-title {height:auto !important; min-height:72px; overflow: visible
+ !important;}
+.catalog_item .item-title a, .catalog_item .item-title a span, .view-item .item-title a span {display:inline-block;}
+#header .catalog_menu ul.menu > li > a {color:#fff;}
+
+
+
+#content .right_block.catalog {white-space: nowrap;}
+.breadcrumbs .drop {white-space: nowrap;}
+.catalog_detail .extended_info.open_stores .availability-row .value {white-space: nowrap;}
+.catalog_section_list .section_item li.sect {white-space: nowrap;}
+.group_description {white-space:normal;}
+.catalog_item .ribbons, .catalog_detail .ribbons, .list_item .ribbons, .differences_table .catalog_item:hover .ribbons {white-space:normal;}
+.display_list .list_item .preview_text, .display_list .list_item .props_list td, .smartfilter, .smartfilter input, .catalog_detail .stock_board .txt, .index_bottom .info_column .about_column, .header-cart-block .cart .summ, .header-cart-block .cart .delay_link {white-space:normal;}
+.child_wrapp .see_more {white-space: nowrap;}
+.display_list .list_item .desc_name, .display_list .list_item .preview_text {white-space:normal;}
+.module_products_list td.item-name-cell {white-space:normal;}
+.catalog_detail .props_table {width:99%; white-space: nowrap;}
+@media all and (max-width: 600px)
+{
+   .catalog_detail .props_table {white-space: normal;}
+}
+.summary .cost_cell {white-space: nowrap;}
+.summary .order_item_weight {white-space: nowrap;}
+
+/*-------  begin custom header -------*/
+
+.content-header {
+    text-align: center;
+    margin: 15px 0;
+}
+.content-header h1 {
+    display: inline;
+    line-height: 1.2;
+    border-bottom: 1px dashed;
+    cursor: pointer;
+}
+.content-header__context {
+    display: none;
+    margin: 15px 0;
+    text-align: left;
+}
+
+/*-------  end custom header -------*/
