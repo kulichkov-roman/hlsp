@@ -255,7 +255,7 @@ $iSectionsCount = CIBlockSection::GetCount(
 
             if(count($SEO_DATA['seo_meta']) > 0)
             {
-                $tmp=trim($SEO_DATA['seo_meta']['H1']);
+                $tmp = trim($SEO_DATA['seo_meta']['H1']);
                 if(strlen($tmp))
                 {
                     $APPLICATION->SetTitle($tmp);
@@ -496,6 +496,7 @@ $iSectionsCount = CIBlockSection::GetCount(
             $arFilterSubSec = array(
                 'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
                 'CODE' => $arResult['VARIABLES']['SECTION_DL2'],
+                'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
                 'PROPERTY_LEVEL_VALUE' => 2
             );
 
@@ -521,6 +522,7 @@ $iSectionsCount = CIBlockSection::GetCount(
                 $arFilterElem = array(
                     'IBLOCK_ID'      => $environment->get('catalogIBlock'),
                     'ID'             => $arSubSecItem['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
+                    'SECTION_ID'     => $arSubSecItem['PROPERTY_LINK_SECTION_CAT_VALUE']
                 );
 
                 $rsElem = \CIBlockElement::GetList(

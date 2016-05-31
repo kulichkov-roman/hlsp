@@ -495,6 +495,7 @@ $iSectionsCount = CIBlockSection::GetCount(
             $arFilterSubSec = array(
                 'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
                 'CODE' => $arResult['VARIABLES']['SECTION_DL1'],
+                'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
                 'PROPERTY_LEVEL_VALUE' => 1
             );
 
@@ -520,6 +521,7 @@ $iSectionsCount = CIBlockSection::GetCount(
                 $arFilterElem = array(
                     'IBLOCK_ID'      => $environment->get('catalogIBlock'),
                     'ID'             => $arSubSecItem['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
+                    'SECTION_ID'     => $arSubSecItem['PROPERTY_LINK_SECTION_CAT_VALUE']
                 );
 
                 $rsElem = \CIBlockElement::GetList(
