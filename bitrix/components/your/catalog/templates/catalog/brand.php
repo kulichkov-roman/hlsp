@@ -370,8 +370,8 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             }
             ?>
             <?$APPLICATION->IncludeComponent(
-                "bitrix:catalog.smart.filter",
-                "main",
+                "your:catalog.smart.filter",
+                "brands",
                 Array(
                     "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                     "IBLOCK_ID" => $arParams["IBLOCK_ID"],
