@@ -409,7 +409,8 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                     "ADD_SECTIONS_CHAIN" => "N",
                     "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
                     "TOP_DEPTH" => "3",
-                ),$component
+                ),
+                $component
             );?>
         <?endif;?>
         <?$APPLICATION->IncludeComponent("bitrix:sale.viewed.product", "main", array(
@@ -589,7 +590,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                 $show = intVal($_REQUEST["show"]); $_SESSION["show"] = $show;
             }
             elseif($_SESSION["show"]){
-                $show=intVal($_SESSION["show"]);
+                $show = intVal($_SESSION["show"]);
             }
         }
 
