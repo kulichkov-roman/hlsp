@@ -179,39 +179,62 @@
 										});
 									</script>
 							
-								<?} elseif(!empty($arItem["VALUES"]) && !isset($arItem["PRICE"])){?>
-									<?if($arItem["CODE"] == "HIT"){continue;}?>
-									<? if($arParams["SHOW_HINTS"]=="Y") { $prop = CIBlockProperty::GetByID($arItem["ID"], $arParams["IBLOCK_ID"])->GetNext(); } ?>
-									
-									<?foreach($arItem["VALUES"] as $val => $ar):?>
-										<? if ($ar["CHECKED"]) { $arItem["OPENED"]="Y"; } ?>
-									<?endforeach;?>
-									
-									<?$iOpened++;?>
-									<div class="bx_filter_container<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?>" property_id="<?=$arItem["ID"]?>">
-										<?if($arItem["CODE"]!="IN_STOCK"){?>
-											<div class="bx_filter_container_title"><span class="name"><span><?=$arItem["NAME"]?></span></span><?if ($prop["HINT"]):?><span class="hint"><span class="hint_icon"><i>?</i></span><b class="triangle"></b><div class="tooltip"><a class="tooltip_close">&times;</a><?=$prop["HINT"]?></div></span><?endif;?><i class="arr"></i></div>
-										<?}else{?>
-											<div class="bx_filter_container_title"></div>
-										<?}?>
-										<div class="bx_filter_block<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?><?if(count($arItem["VALUES"])>6):?> scrollable<?endif;?>" <?=($arItem["CODE"]=="IN_STOCK" ? "style='display: block;'" : "");?>>
-											<?foreach($arItem["VALUES"] as $val => $ar):?>
-												<div class="<?echo $ar["DISABLED"] ? 'disabled': ''?>">
-													<input
-														type="checkbox"
-														value="<?echo $ar["HTML_VALUE"]?>"
-														name="<?echo $ar["CONTROL_NAME"]?>"
-														id="<?echo $ar["CONTROL_ID"]?>"
-														<?echo $ar["CHECKED"]? 'checked="checked"': ''?>
-														onclick="smartFilter.click(this)"
-														<?if ($ar["DISABLED"]):?>disabled<?endif?>
-													/>
-													<label for="<?echo $ar["CONTROL_ID"]?>"><?echo $ar["VALUE"];?></label>
-												</div>
-											<?endforeach;?>
+								<?} elseif(!empty($arItem["VALUES"]) && !isset($arItem["PRICE"])){
+									if($arItem["CODE"] == "HIT"){
+										continue;
+									}
+									if($arItem['CODE'] == 'CML2_MANUFACTURER'){
+										?>
+										<div class="bx_filter_container<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?>" property_id="<?=$arItem["ID"]?>">
+											<?if($arItem["CODE"]!="IN_STOCK"){?>
+												<div class="bx_filter_container_title"><span class="name"><span><?=$arItem["NAME"]?></span></span><?if ($prop["HINT"]):?><span class="hint"><span class="hint_icon"><i>?</i></span><b class="triangle"></b><div class="tooltip"><a class="tooltip_close">&times;</a><?=$prop["HINT"]?></div></span><?endif;?><i class="arr"></i></div>
+											<?}?>
+											<div class="bx_filter_block<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?><?if(count($arItem["VALUES"])>6):?> scrollable<?endif;?>" <?=($arItem["CODE"]=="IN_STOCK" ? "style='display: block;'" : "");?>>
+												<?foreach($arItem["VALUES"] as $val => $ar):?>
+													<div class="<?echo $ar["DISABLED"] ? 'disabled': ''?>">
+														<a href="<?=$ar['BRAND_URL']?>"><?echo $ar["VALUE"];?></a>
+													</div>
+												<?endforeach;?>
+											</div>
+											<span class="bx_filter_container_modef"></span>
 										</div>
-										<span class="bx_filter_container_modef"></span>
-									</div>
+										<?
+									} else {
+										?>
+										<?if($arParams["SHOW_HINTS"]=="Y") {
+											$prop = CIBlockProperty::GetByID($arItem["ID"], $arParams["IBLOCK_ID"])->GetNext();
+										}?>
+										<?foreach($arItem["VALUES"] as $val => $ar):?>
+											<? if ($ar["CHECKED"]) { $arItem["OPENED"]="Y"; } ?>
+										<?endforeach;?>
+										<?$iOpened++;?>
+										<div class="bx_filter_container<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?>" property_id="<?=$arItem["ID"]?>">
+											<?if($arItem["CODE"]!="IN_STOCK"){?>
+												<div class="bx_filter_container_title"><span class="name"><span><?=$arItem["NAME"]?></span></span><?if ($prop["HINT"]):?><span class="hint"><span class="hint_icon"><i>?</i></span><b class="triangle"></b><div class="tooltip"><a class="tooltip_close">&times;</a><?=$prop["HINT"]?></div></span><?endif;?><i class="arr"></i></div>
+											<?}else{?>
+												<div class="bx_filter_container_title"></div>
+											<?}?>
+											<div class="bx_filter_block<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?><?if(count($arItem["VALUES"])>6):?> scrollable<?endif;?>" <?=($arItem["CODE"]=="IN_STOCK" ? "style='display: block;'" : "");?>>
+												<?foreach($arItem["VALUES"] as $val => $ar):?>
+													<div class="<?echo $ar["DISABLED"] ? 'disabled': ''?>">
+														<input
+															type="checkbox"
+															value="<?echo $ar["HTML_VALUE"]?>"
+															name="<?echo $ar["CONTROL_NAME"]?>"
+															id="<?echo $ar["CONTROL_ID"]?>"
+															<?echo $ar["CHECKED"]? 'checked="checked"': ''?>
+															onclick="smartFilter.click(this)"
+															<?if ($ar["DISABLED"]):?>disabled<?endif?>
+														/>
+														<label for="<?echo $ar["CONTROL_ID"]?>"><?echo $ar["VALUE"];?></label>
+													</div>
+												<?endforeach;?>
+											</div>
+											<span class="bx_filter_container_modef"></span>
+										</div>
+										<?
+									}
+									?>
 								<?}?>
 					<?}?>
 				<?}?>

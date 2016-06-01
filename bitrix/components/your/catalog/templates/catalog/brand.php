@@ -377,7 +377,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                     "IBLOCK_ID" => $arParams["IBLOCK_ID"],
                     "SECTION_ID" => $arCurSection['ID'],
                     "FILTER_NAME" => $arParams["FILTER_NAME"],
-                    "PRICE_CODE" => ""/*$arParams["PRICE_CODE"]*/,
+                    "PRICE_CODE" => "",
                     "CACHE_TYPE" => "A",
                     "CACHE_TIME" => "36000000",
                     "CACHE_NOTES" => "",
@@ -706,7 +706,6 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             ),
             $component
         );
-
         ?>
     </div>
 <?endif;?>

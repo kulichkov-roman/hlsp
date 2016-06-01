@@ -19,10 +19,62 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 					<label for="'.$ar["CONTROL_ID"].'"><i class="icon"></i><span>'.$ar["VALUE"].'</span></label>
 				</div>';
 		}
-	}elseif($arItem["CODE"]=="IN_STOCK"){
+	} elseif($arItem["CODE"]=="IN_STOCK"){
 		sort($arResult["ITEMS"][$key]["VALUES"]);
 		if($arResult["ITEMS"][$key]["VALUES"])
 			$arResult["ITEMS"][$key]["VALUES"][0]["VALUE"]=$arItem["NAME"];
+	} elseif($arItem["CODE"]=="CML2_MANUFACTURER"){
+
+		global $APPLICATION;
+
+		$environment = \Your\Environment\EnvironmentManager::getInstance();
+
+		$curDir = $APPLICATION->GetCurDir();
+
+		$arUrl = array_unique(explode('/', $curDir));
+		array_splice($arUrl, sizeof($arUrl)-1);
+
+		$arBrandNames = array();
+		foreach($arItem['VALUES'] as &$arValue)
+		{
+			$arBrandNames[] = $arValue['VALUE'];
+		}
+
+		$arBrandSort = array();
+		$arBrandSelect = array(
+			'ID',
+			'NAME',
+			'CODE'
+		);
+
+		$arBrandFilter = array(
+			'IBLOCK_ID' => $environment->get('brandIBlock'),
+			'NAME' => $arBrandNames
+		);
+
+		$rsBrandElements = CIBlockElement::GetList(
+			$arBrandSort,
+			$arBrandFilter,
+			false,
+			false,
+			$arSelect
+		);
+
+		$arBrandCodes = array();
+		while($arBrandItem = $rsBrandElements->GetNext())
+		{
+			$arBrandCodes[$arBrandItem['NAME']] = $arBrandItem['CODE'];
+		}
+
+		foreach($arItem['VALUES'] as &$arValue)
+		{
+			$arBrandUrl   = $arUrl;
+			$arBrandUrl[] = $arBrandCodes[$arValue['VALUE']];
+			$arBrandUrl[] = '';
+			
+			$arValue['BRAND_URL'] = implode('/', $arBrandUrl);
+		}
+		unset($arValue);
 	}
 }
 ?>
