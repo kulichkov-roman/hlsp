@@ -64,6 +64,10 @@ h1 {font-size:24px;}
     padding-left: 5px;
 }
 
+.bx_filter_vertical a {
+    font-size: 11px;
+}
+
 .bx_filter_vertical input[type="checkbox"]:checked + label:before {
     display: none;
 }
@@ -71,6 +75,7 @@ h1 {font-size:24px;}
 /*Подразделы*/
 .product-group-links {
     width: 100%;
+    max-width: 777px;
     height: 40px;
     border: 1px solid #e7e7e7;
     margin-bottom: 15px;
