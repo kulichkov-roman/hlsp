@@ -58,6 +58,7 @@ h1 {font-size:24px;}
 
 /*-------  end custom header -------*/
 
+/*Фильтра*/
 .bx_filter_vertical label {
     color: #bd104e;
     padding-left: 5px;
@@ -67,6 +68,7 @@ h1 {font-size:24px;}
     display: none;
 }
 
+/*Подразделы*/
 .product-group-links {
     width: 100%;
     height: 40px;
@@ -102,4 +104,9 @@ li.product-group-links__item a:active,
 li.product-group-links__item a:focus {
     color: #000;
     text-decoration: none;
+}
+
+/*Левоем меню*/
+#content  .left_block {
+    padding-top: 58px;
 }

@@ -554,6 +554,71 @@ $iSectionsCount = CIBlockSection::GetCount(
                 });
             </script>
         <?endif;?>
+        <?
+        $arSortSubSec = array();
+        $arSelectSubSec = array(
+            'ID',
+            'NAME',
+            'CODE',
+            'PROPERTY_LINK_SECTION_CAT',
+            'PROPERTY_LINK_ELEMENTS_CAT',
+            'PROPERTY_LEVEL'
+        );
+        $arFilterSubSec = array(
+            'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
+            'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
+            'PROPERTY_LEVEL_VALUE' => 2
+        );
+        $rsSubSec = \CIBlockElement::GetList(
+            $arSortSubSec,
+            $arFilterSubSec,
+            false,
+            false,
+            $arSelectSubSec
+        );
+
+        $curDir = $APPLICATION->GetCurDir();
+
+        $arUrl = array_unique(explode('/', $curDir));
+        array_splice($arUrl, sizeof($arUrl)-1);
+
+        $subSecUrl = '';
+
+        $arSubSec = array();
+        while($arSubSecItem = $rsSubSec->Fetch())
+        {
+            $arSubSecUrl   = $arUrl;
+            $arSubSecUrl[] = $arSubSecItem['CODE'];
+            $arSubSecUrl[] = '';
+            $arSubSecUrl = implode('/', $arSubSecUrl);
+
+            $arSubSec[] = array(
+                'NAME' => $arSubSecItem['NAME'],
+                'SUB_SEC_URL' => $arSubSecUrl ? $arSubSecUrl : 'javascript:void(0)'
+            );
+        }
+        ?>
+        <?if(sizeof($arSubSec)){?>
+            <div class="product-group-links">
+                <ul class="product-group-links__list">
+                    <?foreach($arSubSec as $arItem){?>
+                        <li class="product-group-links__item">
+                            <a href="<?=$arItem['SUB_SEC_URL']?>">
+                                <?=$arItem['NAME']?>
+                            </a>
+                        </li>
+                    <?}?>
+                    <?
+                    $arSubSecUrl   = $arUrl;
+                    $arSubSecUrl[] = '';
+                    $strSubSecUrl = implode('/', $arSubSecUrl);
+                    ?>
+                    <li class="product-group-links__item">
+                        <a href="<?=$strSubSecUrl?>">Все</a>
+                    </li>
+                </ul>
+            </div>
+        <?}?>
         <div class="sort_header">
             <!--noindex-->
             <?

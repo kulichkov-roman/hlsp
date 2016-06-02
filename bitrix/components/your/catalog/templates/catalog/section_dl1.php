@@ -488,6 +488,7 @@ $iSectionsCount = CIBlockSection::GetCount(
             $arSelectSubSec = array(
                 'ID',
                 'NAME',
+                'CODE',
                 'PROPERTY_LINK_SECTION_CAT',
                 'PROPERTY_LINK_ELEMENTS_CAT',
                 'PROPERTY_LEVEL'
@@ -508,7 +509,7 @@ $iSectionsCount = CIBlockSection::GetCount(
             );
 
             $arElemIDs = array();
-            if($arSubSecItem = $rsSubSec->Fetch())
+            if($arSubSecDl1Item = $rsSubSec->Fetch())
             {
                 $arSortElem = array(
                     'SORT' => 'ASC'
@@ -520,8 +521,8 @@ $iSectionsCount = CIBlockSection::GetCount(
                 );
                 $arFilterElem = array(
                     'IBLOCK_ID'      => $environment->get('catalogIBlock'),
-                    'ID'             => $arSubSecItem['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
-                    'SECTION_ID'     => $arSubSecItem['PROPERTY_LINK_SECTION_CAT_VALUE']
+                    'ID'             => $arSubSecDl1Item['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
+                    'SECTION_ID'     => $arSubSecDl1Item['PROPERTY_LINK_SECTION_CAT_VALUE']
                 );
 
                 $rsElem = \CIBlockElement::GetList(
@@ -540,7 +541,7 @@ $iSectionsCount = CIBlockSection::GetCount(
         }
         ?>
         <div class="content-header">
-            <h1><?=$arSubSecItem['NAME']?></h1>
+            <h1><?=$arSubSecDl1Item['NAME']?></h1>
         </div>
         <?if('Y' == $arParams['USE_FILTER']):?>
             <div class="adaptive_filter">
@@ -553,6 +554,72 @@ $iSectionsCount = CIBlockSection::GetCount(
                 });
             </script>
         <?endif;?>
+        <?
+        $arSortSubSec = array();
+        $arSelectSubSec = array(
+            'ID',
+            'NAME',
+            'CODE',
+            'PROPERTY_LINK_SECTION_CAT',
+            'PROPERTY_LINK_ELEMENTS_CAT',
+            'PROPERTY_LEVEL'
+        );
+        $arFilterSubSec = array(
+            'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
+            'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
+            'PROPERTY_LEVEL_VALUE' => 2
+        );
+        $rsSubSec = \CIBlockElement::GetList(
+            $arSortSubSec,
+            $arFilterSubSec,
+            false,
+            false,
+            $arSelectSubSec
+        );
+
+        $curDir = $APPLICATION->GetCurDir();
+
+        $arUrl = array_unique(explode('/', $curDir));
+        array_splice($arUrl, sizeof($arUrl)-1);
+
+        $subSecUrl = '';
+
+        $arSubSec = array();
+        while($arSubSecDl2Item = $rsSubSec->Fetch())
+        {
+            $arSubSecUrl   = $arUrl;
+            $arSubSecUrl[] = $arSubSecDl1Item['CODE'];
+            $arSubSecUrl[] = $arSubSecDl2Item['CODE'];
+            $arSubSecUrl[] = '';
+            $strSubSecUrl = implode('/', $arSubSecUrl);
+
+            $arSubSec[] = array(
+                'NAME' => $arSubSecDl2Item['NAME'],
+                'SUB_SEC_URL' => $strSubSecUrl ? $strSubSecUrl : 'javascript:void(0)'
+            );
+        }
+        ?>
+        <?if(sizeof($arSubSec)){?>
+            <div class="product-group-links">
+                <ul class="product-group-links__list">
+                    <?foreach($arSubSec as $arItem){?>
+                        <li class="product-group-links__item">
+                            <a href="<?=$arItem['SUB_SEC_URL']?>">
+                                <?=$arItem['NAME']?>
+                            </a>
+                        </li>
+                    <?}?>
+                    <?
+                    $arSubSecUrl   = $arUrl;
+                    $arSubSecUrl[] = '';
+                    $strSubSecUrl = implode('/', $arSubSecUrl);
+                    ?>
+                    <li class="product-group-links__item">
+                        <a href="<?=$strSubSecUrl?>">Все</a>
+                    </li>
+                </ul>
+            </div>
+        <?}?>
         <div class="sort_header">
             <!--noindex-->
             <?

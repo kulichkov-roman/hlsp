@@ -452,11 +452,6 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
     </div>
     <div class="compare_small" id="compare_small"></div>
     <div class="right_block clearfix catalog">
-        <?
-        /**
-         * По требованию SEO
-         */
-        ?>
         <div class="content-header">
             <h1><?$APPLICATION->ShowTitle('getPageTitle');?></h1>
         </div>
@@ -471,6 +466,64 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                 });
             </script>
         <?endif;?>
+        <?
+        $environment = \Your\Environment\EnvironmentManager::getInstance();
+
+        $arSortSubSec = array();
+        $arSelectSubSec = array(
+            'ID',
+            'NAME',
+            'CODE',
+            'PROPERTY_LINK_SECTION_CAT',
+            'PROPERTY_LINK_ELEMENTS_CAT',
+            'PROPERTY_LEVEL'
+        );
+        $arFilterSubSec = array(
+            'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
+            'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
+            'PROPERTY_LEVEL_VALUE' => 1
+        );
+        $rsSubSec = \CIBlockElement::GetList(
+            $arSortSubSec,
+            $arFilterSubSec,
+            false,
+            false,
+            $arSelectSubSec
+        );
+
+        $curDir = $APPLICATION->GetCurDir();
+
+        $arUrl = array_unique(explode('/', $curDir));
+
+        $subSecUrl = '';
+
+        $arSubSec = array();
+        while($arSubSecItem = $rsSubSec->Fetch())
+        {
+            $arSubSecUrl   = $arUrl;
+            $arSubSecUrl[] = $arSubSecItem['CODE'];
+            $arSubSecUrl[] = '';
+            $arSubSecUrl = implode('/', $arSubSecUrl);
+
+            $arSubSec[] = array(
+                'NAME' => $arSubSecItem['NAME'],
+                'SUB_SEC_URL' => $arSubSecUrl ? $arSubSecUrl : 'javascript:void(0)'
+            );
+        }
+        ?>
+        <?if(sizeof($arSubSec)){?>
+            <div class="product-group-links">
+                <ul class="product-group-links__list">
+                    <?foreach($arSubSec as $arItem){?>
+                        <li class="product-group-links__item">
+                            <a href="<?=$arItem['SUB_SEC_URL']?>">
+                                <?=$arItem['NAME']?>
+                            </a>
+                        </li>
+                    <?}?>
+                </ul>
+            </div>
+        <?}?>
         <div class="sort_header">
             <!--noindex-->
             <?
@@ -490,7 +543,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                     $display = $arParams["DEFAULT_LIST_TEMPLATE"];
                 }
             }
-            else{
+            else {
                 $display = "block";
             }
             $template = "catalog_".$display;
@@ -611,7 +664,7 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                 'CODE' => $arResult['VARIABLES']['BRAND']
             );
 
-            $rsBrand = CIBlockElement::GetList(
+            $rsBrand = \CIBlockElement::GetList(
                 $arSortBrand,
                 $arFilterBrand,
                 false,
