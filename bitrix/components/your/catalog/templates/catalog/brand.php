@@ -412,7 +412,7 @@ if($arResult['VARIABLES']['BRAND'] <> '')
                     "SECTION_ID" => $arCurSection['ID'],
                     "FILTER_NAME" => $arParams["FILTER_NAME"],
                     "PRICE_CODE" => "",
-                    "CACHE_TYPE" => "A",
+                    "CACHE_TYPE" => "N",
                     "CACHE_TIME" => "36000000",
                     "CACHE_NOTES" => "",
                     "CACHE_GROUPS" => "Y",
