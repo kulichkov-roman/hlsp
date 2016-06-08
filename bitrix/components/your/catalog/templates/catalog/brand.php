@@ -60,6 +60,36 @@ if($values['SECTION_META_KEYWORDS']){
     $APPLICATION->SetPageProperty("keywords", $values['SECTION_META_KEYWORDS']);
 }
 $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y"));
+
+$environment = \Your\Environment\EnvironmentManager::getInstance();
+
+$arBrand = array();
+
+if($arResult['VARIABLES']['BRAND'] <> '')
+{
+    $arSortBrand = array();
+    $arSelectBrand = array(
+        'ID',
+        'NAME'
+    );
+    $arFilterBrand = array(
+        'IBLOCK_ID' => $environment->get('brandIBlock'),
+        'CODE' => $arResult['VARIABLES']['BRAND']
+    );
+
+    $rsBrand = \CIBlockElement::GetList(
+        $arSortBrand,
+        $arFilterBrand,
+        false,
+        false,
+        $arSelectBrand
+    );
+
+    if($arBrandItem = $rsBrand->Fetch())
+    {
+        $arBrand = $arBrandItem;
+    }
+}
 ?>
 <?if($iSectionsCount > 0):?>
     <script type="text/javascript" src="/js/jquery.main.js"></script>
@@ -368,8 +398,12 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
                     $obCache->EndDataCache($arCurSection);
                 }
             }
-            ?>
-            <?$APPLICATION->IncludeComponent(
+
+            global $arrFilterBrands;
+            $arrFilterBrands = array(
+                'PROPERTY_BRAND' => $arBrand['ID']
+            );
+            $APPLICATION->IncludeComponent(
                 "your:catalog.smart.filter",
                 "brands",
                 Array(
@@ -467,8 +501,6 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
             </script>
         <?endif;?>
         <?
-        $environment = \Your\Environment\EnvironmentManager::getInstance();
-
         $arSortSubSec = array();
         $arSelectSubSec = array(
             'ID',
@@ -648,35 +680,6 @@ $iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"
         }
 
         $environment = \Your\Environment\EnvironmentManager::getInstance();
-
-        $arBrand = array();
-        if($arResult['VARIABLES']['BRAND'] <> '')
-        {
-            $arSortBrand = array(
-                'SORT' => 'ASC'
-            );
-            $arSelectBrand = array(
-                'ID',
-                'NAME'
-            );
-            $arFilterBrand = array(
-                'IBLOCK_ID' => $environment->get('brandIBlock'),
-                'CODE' => $arResult['VARIABLES']['BRAND']
-            );
-
-            $rsBrand = \CIBlockElement::GetList(
-                $arSortBrand,
-                $arFilterBrand,
-                false,
-                false,
-                $arSelectBrand
-            );
-
-            if($arBrandItem = $rsBrand->Fetch())
-            {
-                $arBrand = $arBrandItem;
-            }
-        }
 
         $APPLICATION->IncludeComponent(
             'your:catalog.section.brands',
