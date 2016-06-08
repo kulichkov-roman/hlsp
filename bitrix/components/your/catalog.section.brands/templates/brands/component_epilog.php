@@ -1,22 +1,12 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
 <?
-/**
- * Вывести ID элемента, нужно для кнопки положить в корзину.
- */
-
-
 if(sizeof($arResult["ID"]))
 {
- /*	if($USER->isAdmin())
-	{
-		echo "<pre>"; var_dump($arResult); echo "</pre>";
-	}*/
-
 	/**
 	 * Получить список всех разделов
 	 */
 	$arSort = array(
-		"ID"=>"DESC"
+		"ID" => "DESC"
 	);
 	$arFilter = array(
 		"IBLOCK_ID" => 11,
