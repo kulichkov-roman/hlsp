@@ -88,6 +88,36 @@ $iSectionsCount = CIBlockSection::GetCount(
     array("SECTION_ID" => $arSection["ID"], "ACTIVE" => "Y",
           "GLOBAL_ACTIVE" => "Y")
 );
+
+$environment = \Your\Environment\EnvironmentManager::getInstance();
+
+$arBrand = array();
+
+if($arResult['VARIABLES']['BRAND'] <> '')
+{
+    $arSortBrand = array();
+    $arSelectBrand = array(
+        'ID',
+        'NAME'
+    );
+    $arFilterBrand = array(
+        'IBLOCK_ID' => $environment->get('brandIBlock'),
+        'CODE'      => $arResult['VARIABLES']['BRAND']
+    );
+
+    $rsBrand = \CIBlockElement::GetList(
+        $arSortBrand,
+        $arFilterBrand,
+        false,
+        false,
+        $arSelectBrand
+    );
+
+    if($arBrandItem = $rsBrand->Fetch())
+    {
+        $arBrand = $arBrandItem;
+    }
+}
 ?>
 <?if($iSectionsCount > 0):?>
     <script type="text/javascript" src="/js/jquery.main.js"></script>
@@ -393,17 +423,21 @@ $iSectionsCount = CIBlockSection::GetCount(
                     $obCache->EndDataCache($arCurSection);
                 }
             }
-            ?>
-            <?$APPLICATION->IncludeComponent(
-                "bitrix:catalog.smart.filter",
-                "main",
+
+            global $arrFilterBrands;
+            $arrFilterBrands = array(
+                'PROPERTY_BRAND' => $arBrand['ID']
+            );
+            $APPLICATION->IncludeComponent(
+                "your:catalog.smart.filter",
+                "brands",
                 Array(
                     "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                     "IBLOCK_ID" => $arParams["IBLOCK_ID"],
                     "SECTION_ID" => $arCurSection['ID'],
                     "FILTER_NAME" => $arParams["FILTER_NAME"],
-                    "PRICE_CODE" => ""/*$arParams["PRICE_CODE"]*/,
-                    "CACHE_TYPE" => "A",
+                    "PRICE_CODE" => "",
+                    "CACHE_TYPE" => "N",
                     "CACHE_TIME" => "36000000",
                     "CACHE_NOTES" => "",
                     "CACHE_GROUPS" => "Y",
@@ -413,7 +447,8 @@ $iSectionsCount = CIBlockSection::GetCount(
                     "SECTION_DESCRIPTION" => "DESCRIPTION",
                     "SHOW_HINTS" => $arParams["SHOW_HINTS"],
                 ),
-                $component, array('HIDE_ICONS' => 'Y'));
+                $component, array('HIDE_ICONS' => 'Y')
+            );
             ?>
         <?endif;?>
         <?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>

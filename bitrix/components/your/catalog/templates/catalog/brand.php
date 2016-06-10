@@ -211,7 +211,6 @@ if($arResult['VARIABLES']['BRAND'] <> '')
             if(sizeof($arrSeoFilter) > 0)
             {
                 $arParams["FILTER_NAME"] = 'arrSeoFilter';
-
             }
 
             $arSort = array();
@@ -422,7 +421,8 @@ if($arResult['VARIABLES']['BRAND'] <> '')
                     "SECTION_DESCRIPTION" => "DESCRIPTION",
                     "SHOW_HINTS" => $arParams["SHOW_HINTS"],
                 ),
-                $component, array('HIDE_ICONS' => 'Y'));
+                $component, array('HIDE_ICONS' => 'Y')
+            );
             ?>
         <?endif;?>
         <?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>
