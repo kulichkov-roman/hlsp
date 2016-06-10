@@ -118,6 +118,68 @@ if($arResult['VARIABLES']['BRAND'] <> '')
         $arBrand = $arBrandItem;
     }
 }
+
+$arSubSec = array();
+$arSubSecItem = array();
+if($arResult['VARIABLES']['SECTION_DL2'] <> '')
+{
+    $arSortSubSec = array(
+        'SORT' => 'ASC'
+    );
+    $arSelectSubSec = array(
+        'ID',
+        'NAME',
+        'PROPERTY_LINK_SECTION_CAT',
+        'PROPERTY_LINK_ELEMENTS_CAT',
+        'PROPERTY_LEVEL'
+    );
+    $arFilterSubSec = array(
+        'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
+        'CODE' => $arResult['VARIABLES']['SECTION_DL2'],
+        'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
+        'PROPERTY_LEVEL_VALUE' => 2
+    );
+
+    $rsSubSec = \CIBlockElement::GetList(
+        $arSortSubSec,
+        $arFilterSubSec,
+        false,
+        false,
+        $arSelectSubSec
+    );
+
+    $arElemIDs = array();
+    if($arSubSecItem = $rsSubSec->Fetch())
+    {
+        $arSortElem = array(
+            'SORT' => 'ASC'
+        );
+        $arSelectElem = array(
+            'ID',
+            'NAME',
+            'PROPERTY_LEVEL'
+        );
+        $arFilterElem = array(
+            'IBLOCK_ID'      => $environment->get('catalogIBlock'),
+            'ID'             => $arSubSecItem['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
+            'SECTION_ID'     => $arSubSecItem['PROPERTY_LINK_SECTION_CAT_VALUE'],
+            'ACTIVE'         => 'Y'
+        );
+
+        $rsElem = \CIBlockElement::GetList(
+            $arSortElem,
+            $arFilterElem,
+            false,
+            false,
+            $arSelectElem
+        );
+
+        while($arElemItem = $rsElem->Fetch())
+        {
+            $arElemIDs[] = $arElemItem['ID'];
+        }
+    }
+}
 ?>
 <?if($iSectionsCount > 0):?>
     <script type="text/javascript" src="/js/jquery.main.js"></script>
@@ -423,10 +485,10 @@ if($arResult['VARIABLES']['BRAND'] <> '')
                     $obCache->EndDataCache($arCurSection);
                 }
             }
-
             global $arrFilterBrands;
             $arrFilterBrands = array(
-                'PROPERTY_BRAND' => $arBrand['ID']
+                'PROPERTY_BRAND' => $arBrand['ID'],
+                'ID' => $arElemIDs
             );
             $APPLICATION->IncludeComponent(
                 "your:catalog.smart.filter",
@@ -447,7 +509,7 @@ if($arResult['VARIABLES']['BRAND'] <> '')
                     "SECTION_DESCRIPTION" => "DESCRIPTION",
                     "SHOW_HINTS" => $arParams["SHOW_HINTS"],
                 ),
-                $component, array('HIDE_ICONS' => 'Y')
+                $component, array('HIDE_ICONS' => 'N')
             );
             ?>
         <?endif;?>
@@ -511,70 +573,6 @@ if($arResult['VARIABLES']['BRAND'] <> '')
     </div>
     <div class="compare_small" id="compare_small"></div>
     <div class="right_block clearfix catalog">
-        <?
-        $environment = \Your\Environment\EnvironmentManager::getInstance();
-
-        $arSubSec = array();
-        $arSubSecItem = array();
-        if($arResult['VARIABLES']['SECTION_DL2'] <> '')
-        {
-            $arSortSubSec = array(
-                'SORT' => 'ASC'
-            );
-            $arSelectSubSec = array(
-                'ID',
-                'NAME',
-                'PROPERTY_LINK_SECTION_CAT',
-                'PROPERTY_LINK_ELEMENTS_CAT',
-                'PROPERTY_LEVEL'
-            );
-            $arFilterSubSec = array(
-                'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
-                'CODE' => $arResult['VARIABLES']['SECTION_DL2'],
-                'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
-                'PROPERTY_LEVEL_VALUE' => 2
-            );
-
-            $rsSubSec = \CIBlockElement::GetList(
-                $arSortSubSec,
-                $arFilterSubSec,
-                false,
-                false,
-                $arSelectSubSec
-            );
-
-            $arElemIDs = array();
-            if($arSubSecItem = $rsSubSec->Fetch())
-            {
-                $arSortElem = array(
-                    'SORT' => 'ASC'
-                );
-                $arSelectElem = array(
-                    'ID',
-                    'NAME',
-                    'PROPERTY_LEVEL'
-                );
-                $arFilterElem = array(
-                    'IBLOCK_ID'      => $environment->get('catalogIBlock'),
-                    'ID'             => $arSubSecItem['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
-                    'SECTION_ID'     => $arSubSecItem['PROPERTY_LINK_SECTION_CAT_VALUE']
-                );
-
-                $rsElem = \CIBlockElement::GetList(
-                    $arSortElem,
-                    $arFilterElem,
-                    false,
-                    false,
-                    $arSelectElem
-                );
-
-                while($arElemItem = $rsElem->Fetch())
-                {
-                    $arElemIDs[] = $arElemItem['ID'];
-                }
-            }
-        }
-        ?>
         <div class="content-header">
             <h1><?=$arSubSecItem['NAME']?></h1>
         </div>

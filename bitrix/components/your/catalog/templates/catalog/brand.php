@@ -542,6 +542,9 @@ if($arResult['VARIABLES']['BRAND'] <> '')
                 'SUB_SEC_URL' => $arSubSecUrl ? $arSubSecUrl : 'javascript:void(0)'
             );
         }
+
+        echo "<pre>"; var_dump($arSubSec); echo "</pre>";
+
         ?>
         <?if(sizeof($arSubSec)){?>
             <div class="product-group-links">
