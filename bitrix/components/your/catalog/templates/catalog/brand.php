@@ -508,12 +508,14 @@ if($arResult['VARIABLES']['BRAND'] <> '')
             'CODE',
             'PROPERTY_LINK_SECTION_CAT',
             'PROPERTY_LINK_ELEMENTS_CAT',
-            'PROPERTY_LEVEL'
+            'PROPERTY_LEVEL',
+            'PROPERTY_LINK_BRAND'
         );
         $arFilterSubSec = array(
             'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
             'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
-            'PROPERTY_LEVEL_VALUE' => 1
+            'PROPERTY_LEVEL_VALUE' => 1,
+            'PROPERTY_LINK_BRAND' => $arBrand['ID']
         );
         $rsSubSec = \CIBlockElement::GetList(
             $arSortSubSec,
@@ -542,9 +544,6 @@ if($arResult['VARIABLES']['BRAND'] <> '')
                 'SUB_SEC_URL' => $arSubSecUrl ? $arSubSecUrl : 'javascript:void(0)'
             );
         }
-
-        echo "<pre>"; var_dump($arSubSec); echo "</pre>";
-
         ?>
         <?if(sizeof($arSubSec)){?>
             <div class="product-group-links">

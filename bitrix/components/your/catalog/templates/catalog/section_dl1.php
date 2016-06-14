@@ -177,8 +177,6 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         {
             $arElemIDs[] = $arElemItem['ID'];
         }
-
-        echo "<pre>"; var_dump($arElemIDs); echo "</pre>";
     }
 }
 ?>
@@ -597,12 +595,14 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
             'CODE',
             'PROPERTY_LINK_SECTION_CAT',
             'PROPERTY_LINK_ELEMENTS_CAT',
-            'PROPERTY_LEVEL'
+            'PROPERTY_LEVEL',
+            'PROPERTY_LINK_BRAND'
         );
         $arFilterSubSec = array(
             'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
             'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
-            'PROPERTY_LEVEL_VALUE' => 2
+            'PROPERTY_LEVEL_VALUE' => 2,
+            'PROPERTY_LINK_BRAND' => $arBrand['ID']
         );
         $rsSubSec = \CIBlockElement::GetList(
             $arSortSubSec,
