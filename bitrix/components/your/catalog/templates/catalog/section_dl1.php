@@ -130,13 +130,15 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         'CODE',
         'PROPERTY_LINK_SECTION_CAT',
         'PROPERTY_LINK_ELEMENTS_CAT',
-        'PROPERTY_LEVEL'
+        'PROPERTY_LEVEL',
+        'PROPERTY_GEN_URL'
+
     );
     $arFilterSubSec = array(
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
         'CODE' => $arResult['VARIABLES']['SECTION_DL1'],
         'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
-        'PROPERTY_LEVEL_VALUE' => 1
+        'PROPERTY_LEVEL_VALUE' => 1,
     );
 
     $rsSubSec = \CIBlockElement::GetList(
@@ -176,6 +178,11 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         while($arElemItem = $rsElem->Fetch())
         {
             $arElemIDs[] = $arElemItem['ID'];
+        }
+
+        if($arSubSecDl1Item['PROPERTY_GEN_URL_VALUE'])
+        {
+            $APPLICATION->AddHeadString('<link href="'.$arSubSecDl1Item['PROPERTY_GEN_URL_VALUE'].'" rel="canonical" />',true);
         }
     }
 }
@@ -596,7 +603,8 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
             'PROPERTY_LINK_SECTION_CAT',
             'PROPERTY_LINK_ELEMENTS_CAT',
             'PROPERTY_LEVEL',
-            'PROPERTY_LINK_BRAND'
+            'PROPERTY_LINK_BRAND',
+            'PROPERTY_GEN_URL'
         );
         $arFilterSubSec = array(
             'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),

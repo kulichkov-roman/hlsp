@@ -131,7 +131,8 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         'NAME',
         'PROPERTY_LINK_SECTION_CAT',
         'PROPERTY_LINK_ELEMENTS_CAT',
-        'PROPERTY_LEVEL'
+        'PROPERTY_LEVEL',
+        'PROPERTY_GEN_URL'
     );
     $arFilterSubSec = array(
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
@@ -177,6 +178,11 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         while($arElemItem = $rsElem->Fetch())
         {
             $arElemIDs[] = $arElemItem['ID'];
+        }
+
+        if($arSubSecItem['PROPERTY_GEN_URL_VALUE'])
+        {
+            $APPLICATION->AddHeadString('<link href="'.$arSubSecItem['PROPERTY_GEN_URL_VALUE'].'" rel="canonical" />',true);
         }
     }
 }
