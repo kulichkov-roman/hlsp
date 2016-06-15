@@ -12,8 +12,15 @@ function getBrandsInDir()
 
 	$curDir = $APPLICATION->GetCurDir();
 
+	$arRatio = array(
+		6 => 1,
+		7 => 2,
+		8 => 3,
+	);
+
 	$arUrl = array_unique(explode('/', $curDir));
-	array_splice($arUrl, sizeof($arUrl)-1);
+
+	array_splice($arUrl, sizeof($arUrl)-$arRatio[sizeof($arUrl)]);
 
 	$arSecSort = array();
 	$arSecFilter = array(
@@ -125,7 +132,14 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 			$curDir = $APPLICATION->GetCurDir();
 
 			$arUrl = array_unique(explode('/', $curDir));
-			array_splice($arUrl, sizeof($arUrl)-1);
+
+			$arRatio = array(
+				6 => 1,
+				7 => 2,
+				8 => 3,
+			);
+
+			array_splice($arUrl, sizeof($arUrl)-$arRatio[sizeof($arUrl)]);
 
 			$arBrandUrl   = $arUrl;
 			$arBrandUrl[] = $arBrandCode;
