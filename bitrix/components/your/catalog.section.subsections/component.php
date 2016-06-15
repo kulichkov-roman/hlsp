@@ -673,6 +673,7 @@ if($this->StartResultCache(false, array($arrFilter, ($arParams["CACHE_GROUPS"]==
 		"CHECK_PERMISSIONS" => "Y",
 		"MIN_PERMISSION" => "R",
 		"INCLUDE_SUBSECTIONS" => ($arParams["INCLUDE_SUBSECTIONS"] == 'N' ? 'N' : 'Y'),
+		"PROPERTY_BRAND" => $arParams["BRAND_ID"]
 	);
 
 	if ($arParams["INCLUDE_SUBSECTIONS"] == 'A')
