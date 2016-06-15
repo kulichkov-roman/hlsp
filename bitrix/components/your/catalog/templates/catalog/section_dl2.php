@@ -875,6 +875,7 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
                 'SECTIONS_LIST_PREVIEW_PROPERTY' => $arParams['SECTIONS_LIST_PREVIEW_PROPERTY'],
                 'SHOW_SECTION_LIST_PICTURES' => $arParams['SHOW_SECTION_LIST_PICTURES'],
                 'ELEMENTS_IDS' => $arElemIDs,
+                'BRAND_ID' => $arBrand['ID']
             ),
             $component
         );
