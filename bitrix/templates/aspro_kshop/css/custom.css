@@ -20,7 +20,7 @@ h1 {font-size:24px;}
 
 
 
-#content .right_block.catalog {white-space: nowrap;}
+/*#content .right_block.catalog {white-space: nowrap;}*/
 .breadcrumbs .drop {white-space: nowrap;}
 .catalog_detail .extended_info.open_stores .availability-row .value {white-space: nowrap;}
 .catalog_section_list .section_item li.sect {white-space: nowrap;}
