@@ -122,10 +122,10 @@
 		), $component
 	);?>
 <?}?>
-<?if ($arResult["~DESCRIPTION"]):?>
+<?if ($arResult["DESCRIPTION"]):?>
 	<div class="text">
 		<p>
-		<?=$arResult["~DESCRIPTION"]?></p>
+		<?=$arResult["DESCRIPTION"]?></p>
 	</div>
 <?else:?>
 	<?$arSection = CIBlockSection::GetList(array(), array( "IBLOCK_ID" => $arResult["IBLOCK_ID"], "ID" => $arResult["ID"] ), false, array( "ID", "UF_SECTION_DESCR"))->GetNext();?>

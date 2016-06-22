@@ -393,17 +393,17 @@ ul li::before {
 					$obCache->EndDataCache($arCurSection);
 				}
 			}
-			?>
-			<?$APPLICATION->IncludeComponent(
-				"bitrix:catalog.smart.filter",
-				"main",
+
+			$APPLICATION->IncludeComponent(
+				"your:catalog.smart.filter",
+				"brands",
 				Array(
 					"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
 					"IBLOCK_ID" => $arParams["IBLOCK_ID"],
 					"SECTION_ID" => $arCurSection['ID'],
 					"FILTER_NAME" => $arParams["FILTER_NAME"],
-					"PRICE_CODE" => ""/*$arParams["PRICE_CODE"]*/,
-					"CACHE_TYPE" => "A",
+					"PRICE_CODE" => "",
+					"CACHE_TYPE" => "N",
 					"CACHE_TIME" => "36000000",
 					"CACHE_NOTES" => "",
 					"CACHE_GROUPS" => "Y",
@@ -413,7 +413,8 @@ ul li::before {
 					"SECTION_DESCRIPTION" => "DESCRIPTION",
 					"SHOW_HINTS" => $arParams["SHOW_HINTS"],
 				),
-				$component, array('HIDE_ICONS' => 'Y'));
+				false
+			);
 			?>
 		<?endif;?>
 		<?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>

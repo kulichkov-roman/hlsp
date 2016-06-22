@@ -1,32 +1,28 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
 <?
-	CJSCore::Init(array("fx"));
-		
-	if (!empty($_COOKIE["KSHOP_FILTER_CLOSED"]))
-	{
-		$arCookies =  json_decode($_COOKIE["KSHOP_FILTER_CLOSED"]);	
-		array_unique ($arCookies);		
-		unset ($_COOKIE["KSHOP_FILTER_CLOSED"]);		
-		setcookie ($_COOKIE["KSHOP_FILTER_CLOSED"], null, -1);			
-		foreach($arCookies as $key => $value)
-		{ foreach($arResult["ITEMS"] as $key=>$property) { if ($property["ID"]==$value) { $arResult["ITEMS"][$key]["OPENED"]="N"; } } }	
-		if (in_array("specials", $arCookies)){ $arResult["SPECIALS_BLOCK"]["OPENED"]="N"; }
-	}
-	if (!empty($_COOKIE["KSHOP_FILTER_OPENED"]))
-	{
-		$arCookies =  json_decode($_COOKIE["KSHOP_FILTER_OPENED"]);	
-		array_unique ($arCookies);		
-		unset ($_COOKIE["KSHOP_FILTER_OPENED"]);		
-		setcookie ($_COOKIE["KSHOP_FILTER_OPENED"], null, -1);		
-		foreach($arCookies as $key => $value)
-		{ foreach($arResult["ITEMS"] as $key=>$property) { if ($property["ID"]==$value) { $arResult["ITEMS"][$key]["OPENED"]="Y"; } } }	
-		if (in_array("specials", $arCookies)){ $arResult["SPECIALS_BLOCK"]["OPENED"]="Y"; }		
-	}
-	$propsCount = 1;
-	/*foreach($arResult["ITEMS"] as $key=>$arItem) 
-	{
-		if((isset($arItem["PRICE"]) && !(!$arItem["VALUES"]["MIN"]["VALUE"] || !$arItem["VALUES"]["MAX"]["VALUE"] || $arItem["VALUES"]["MIN"]["VALUE"] == $arItem["VALUES"]["MAX"]["VALUE"])) || (!isset($arItem["PRICE"])&&( $arItem["PROPERTY_TYPE"] == "N" && !empty($arItem["VALUES"]["MIN"]["VALUE"]) || $arItem["PROPERTY_TYPE"] != "N" && !empty($arItem["VALUES"]) )&& (!($arItem["PROPERTY_TYPE"]=="N"&&($arItem["VALUES"]["MIN"]["VALUE"]==$arItem["VALUES"]["MAX"]["VALUE"]))))) $propsCount++;
-	}*/
+CJSCore::Init(array("fx"));
+
+if (!empty($_COOKIE["KSHOP_FILTER_CLOSED"]))
+{
+	$arCookies =  json_decode($_COOKIE["KSHOP_FILTER_CLOSED"]);
+	array_unique ($arCookies);
+	unset ($_COOKIE["KSHOP_FILTER_CLOSED"]);
+	setcookie ($_COOKIE["KSHOP_FILTER_CLOSED"], null, -1);
+	foreach($arCookies as $key => $value)
+	{ foreach($arResult["ITEMS"] as $key=>$property) { if ($property["ID"]==$value) { $arResult["ITEMS"][$key]["OPENED"]="N"; } } }
+	if (in_array("specials", $arCookies)){ $arResult["SPECIALS_BLOCK"]["OPENED"]="N"; }
+}
+if (!empty($_COOKIE["KSHOP_FILTER_OPENED"]))
+{
+	$arCookies =  json_decode($_COOKIE["KSHOP_FILTER_OPENED"]);
+	array_unique ($arCookies);
+	unset ($_COOKIE["KSHOP_FILTER_OPENED"]);
+	setcookie ($_COOKIE["KSHOP_FILTER_OPENED"], null, -1);
+	foreach($arCookies as $key => $value)
+	{ foreach($arResult["ITEMS"] as $key=>$property) { if ($property["ID"]==$value) { $arResult["ITEMS"][$key]["OPENED"]="Y"; } } }
+	if (in_array("specials", $arCookies)){ $arResult["SPECIALS_BLOCK"]["OPENED"]="Y"; }
+}
+$propsCount = 1;
 ?>
 <?if ($propsCount){?>
 	<div class="bx_filter_vertical">
@@ -189,7 +185,7 @@
 											<?if($arItem["CODE"]!="IN_STOCK"){?>
 												<div class="bx_filter_container_title"><span class="name"><span><?=$arItem["NAME"]?></span></span><?if ($prop["HINT"]):?><span class="hint"><span class="hint_icon"><i>?</i></span><b class="triangle"></b><div class="tooltip"><a class="tooltip_close">&times;</a><?=$prop["HINT"]?></div></span><?endif;?><i class="arr"></i></div>
 											<?}?>
-											<div class="bx_filter_block<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?><?if(count($arItem["VALUES"])>6):?> scrollable<?endif;?>" <?=($arItem["CODE"]=="IN_STOCK" ? "style='display: block;'" : "");?>>
+											<div class="bx_filter_block<?if($arItem["OPENED"]=="Y" || ($iOpened<=3 && $arItem["OPENED"]!="N")):?> active<?endif;?>" <?=($arItem["CODE"]=="IN_STOCK" ? "style='display: block;'" : "");?>>
 												<?foreach($arItem["VALUES"] as $val => $ar):?>
 													<div class="<?echo $ar["DISABLED"] ? 'disabled': ''?>">
 														<a href="<?=$ar['BRAND_URL']?>"><?echo $ar["VALUE"];?></a>

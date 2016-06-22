@@ -8,6 +8,7 @@
 			'brandIBlock'           => 4,
 			'seoSubsectionsIBlock'  => 16,
 			'catalogIBlock'         => 11,
+			'seoDataIBlock'         => 13,
 		)
 	)
 );

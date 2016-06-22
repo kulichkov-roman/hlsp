@@ -134,12 +134,20 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 			$arUrl = array_unique(explode('/', $curDir));
 
 			$arRatio = array(
+				4 => 0,
 				6 => 1,
 				7 => 2,
 				8 => 3,
 			);
 
-			array_splice($arUrl, sizeof($arUrl)-$arRatio[sizeof($arUrl)]);
+			if(!$arRatio[sizeof($arUrl)])
+			{
+				$arUrl[] = 'brand';
+			}
+			else
+			{
+				array_splice($arUrl, sizeof($arUrl)-$arRatio[sizeof($arUrl)]);
+			}
 
 			$arBrandUrl   = $arUrl;
 			$arBrandUrl[] = $arBrandCode;
