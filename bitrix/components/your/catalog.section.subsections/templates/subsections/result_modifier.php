@@ -71,7 +71,7 @@
 						$minItemPriceFormat = $price["PRINT_VALUE"];
 					}
 				}*/
-	/*SKU -- */
+				/*SKU -- */
 				$arSkuTmp = array();
 				if ($offerPropsExists)
 				{
@@ -146,7 +146,7 @@
 					$arSkuTmp["COMPARE"] = "inCompare";
 				$arSkuTmp["COMPARE_URL"] = htmlspecialcharsback($arOffer["COMPARE_URL"]);
 				$arSku[] = $arSkuTmp;
-	/* -- SKU*/
+				/* -- SKU*/
 			}
 			if ($minItemPrice > 0)
 			{

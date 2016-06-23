@@ -41,7 +41,7 @@ function getBrandsInDir()
 	);
 
 	$arSec = array();
-	if ($arSecItem = $rsSection->Fetch())
+	if ($arSecItem = $rsSection->Fetch()){}
 
 	$arElemSort = array();
 	$arElemSelect = array(

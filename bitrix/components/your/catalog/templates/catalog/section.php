@@ -413,7 +413,7 @@ ul li::before {
 					"SECTION_DESCRIPTION" => "DESCRIPTION",
 					"SHOW_HINTS" => $arParams["SHOW_HINTS"],
 				),
-				false
+				$component
 			);
 			?>
 		<?endif;?>
