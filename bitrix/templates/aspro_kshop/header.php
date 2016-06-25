@@ -15,7 +15,6 @@
 	<?$APPLICATION->ShowMeta("SKYPE_TOOLBAR");?>
 	<?$APPLICATION->ShowHead();?>
 	<?$APPLICATION->AddHeadString('<script>BX.message('.CUtil::PhpToJSObject( $MESS, false ).')</script>', true);?>
-	<script src="/bitrix/js/ipol.kladr/ipolkladr.js"></script>
 	<?if(CModule::IncludeModule("aspro.kshop")) {CKShop::Start(SITE_ID);}?>
 	<!--[if gte IE 9]><style type="text/css">.basket_button, .button30, .icon {filter: none;}</style><![endif]-->
 
