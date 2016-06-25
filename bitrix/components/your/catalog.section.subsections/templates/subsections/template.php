@@ -122,21 +122,12 @@
 		), $component
 	);?>
 <?}?>
-<?if ($arResult["DESCRIPTION"]):?>
+<?if ($arResult["DESCRIPTION"]){?>
 	<div class="text">
 		<p>
 		<?=$arResult["DESCRIPTION"]?></p>
 	</div>
-<?else:?>
-	<?$arSection = CIBlockSection::GetList(array(), array( "IBLOCK_ID" => $arResult["IBLOCK_ID"], "ID" => $arResult["ID"] ), false, array( "ID", "UF_SECTION_DESCR"))->GetNext();?>
-	<?if ($arSection["UF_SECTION_DESCR"]):?>
-		<!--div class="group_description"-->
-                <div class="text">
-<p>
-			<?=$arSection["UF_SECTION_DESCR"]?></p>
-		</div>
-	<?endif;?>
-<?endif;?>
+<?}?>
 
 <div class="clear"></div>
 <script>
