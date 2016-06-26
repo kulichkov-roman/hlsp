@@ -952,7 +952,8 @@ $(document).ready(function(){
 			{
 				if($(window).outerWidth()>600)
 				{
-					reCalculateMenu();
+					//@todo функция нигде не определена
+					//reCalculateMenu();
 				}
 			}
 			
