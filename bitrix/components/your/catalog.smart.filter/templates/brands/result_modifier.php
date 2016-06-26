@@ -124,7 +124,7 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 	} elseif($arItem["CODE"] == "CML2_MANUFACTURER"){
 
 		$arBrandCodes = getBrandsInDir();
-
+		
 		$arResult['ITEMS'][$key]['VALUES'] = array();
 
 		foreach($arBrandCodes as $strBrandName => $arBrandCode)
