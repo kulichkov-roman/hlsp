@@ -394,8 +394,8 @@ ul li::before {
 				}
 			}
 			$APPLICATION->IncludeComponent(
-				'bitrix:catalog.smart.filter',
-				'main',
+				'your:catalog.smart.filter',
+				'section',
 				Array(
 					'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
 					'IBLOCK_ID' => $arParams['IBLOCK_ID'],

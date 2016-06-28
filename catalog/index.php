@@ -5,8 +5,8 @@ $APPLICATION->SetTitle("Корейская косметика для очище�
 ?>
 <?
 $APPLICATION->IncludeComponent(
-	"bitrix:catalog",
-	"catalog_ito_15",
+	"your:catalog",
+	"catalog",
 	array(
 		"IBLOCK_TYPE" => "aspro_kshop_catalog",
 		"IBLOCK_ID" => "11",
