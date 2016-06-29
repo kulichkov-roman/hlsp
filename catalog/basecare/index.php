@@ -28,7 +28,7 @@ $APPLICATION->IncludeComponent(
 		"CACHE_FILTER" => "N",
 		"CACHE_GROUPS" => "Y",
 		"SET_TITLE" => "Y",
-		"SET_STATUS_404" => "Y",
+		"SET_STATUS_404" => "N",
 		"USE_ELEMENT_COUNTER" => "Y",
 		"USE_FILTER" => "Y",
 		"FILTER_NAME" => "KSHOP_SMART_FILTER",
@@ -292,6 +292,10 @@ $APPLICATION->IncludeComponent(
 		"DETAIL_BACKGROUND_IMAGE" => "-",
 		"PAGER_BASE_LINK_ENABLE" => "N",
 		"SHOW_404" => "N",
+		"COMPOSITE_FRAME_MODE" => "A",
+		"COMPOSITE_FRAME_TYPE" => "AUTO",
+		"DISABLE_INIT_JS_IN_COMPONENT" => "N",
+		"DETAIL_SET_VIEWED_IN_COMPONENT" => "N",
 		"MESSAGE_404" => "",
 		"SEF_URL_TEMPLATES" => array(
 			"sections" => "",
@@ -309,6 +313,7 @@ $APPLICATION->IncludeComponent(
 			),
 		)
 	),
-	false
+	false,
+	Array('HIDE_ICONS' => 'Y')
 );?>
 <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

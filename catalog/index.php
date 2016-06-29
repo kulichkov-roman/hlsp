@@ -291,7 +291,11 @@ $APPLICATION->IncludeComponent(
 		"SECTION_BACKGROUND_IMAGE" => "-",
 		"DETAIL_BACKGROUND_IMAGE" => "-",
 		"PAGER_BASE_LINK_ENABLE" => "N",
-		"SHOW_404" => "N",
+		"SHOW_404" => "Y",
+		"COMPOSITE_FRAME_MODE" => "A",
+		"COMPOSITE_FRAME_TYPE" => "AUTO",
+		"DISABLE_INIT_JS_IN_COMPONENT" => "N",
+		"DETAIL_SET_VIEWED_IN_COMPONENT" => "N",
 		"MESSAGE_404" => "",
 		"SEF_URL_TEMPLATES" => array(
 			"sections" => "",
@@ -309,6 +313,7 @@ $APPLICATION->IncludeComponent(
 			),
 		)
 	),
-	false
+	false,
+	Array('HIDE_ICONS' => 'Y')
 );?>
 <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
