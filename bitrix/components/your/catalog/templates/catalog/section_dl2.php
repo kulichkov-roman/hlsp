@@ -203,7 +203,7 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         }
     </style>
     <div class="container">
-        <div class="sidebar">
+        <div class="sidebar sections_list">
             <?$APPLICATION->IncludeComponent(
                 "bitrix:catalog.section.list",
                 "subsections_list_ito_15",
@@ -457,105 +457,106 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         </div>
     </div>
 <?else:?>
-    <div class="left_block catalog">
-        <?if('Y' == $arParams['USE_FILTER']):?>
-            <?
-            if(CModule::IncludeModule("iblock")){
-                $arFilter = array("IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y");
-                if(0 < intval($arResult["VARIABLES"]["SECTION_ID"])){
-                    $arFilter["ID"] = $arResult["VARIABLES"]["SECTION_ID"];
-                }
-                elseif('' != $arResult["VARIABLES"]["SECTION_CODE"]){
-                    $arFilter["=CODE"] = $arResult["VARIABLES"]["SECTION_CODE"];
-                }
-                $obCache = new CPHPCache();
-                if($obCache->InitCache(36000, serialize($arFilter), "/iblock/catalog")){
-                    $arCurSection = $obCache->GetVars();
-                }
-                else{
-                    $arCurSection = array();
-                    $dbRes = CIBlockSection::GetList(array(), $arFilter, false, array("ID"));
-                    if(defined("BX_COMP_MANAGED_CACHE")){
-                        global $CACHE_MANAGER;
-                        $CACHE_MANAGER->StartTagCache("/iblock/catalog");
-                        if($arCurSection = $dbRes->GetNext()){
-                            $CACHE_MANAGER->RegisterTag("iblock_id_".$arParams["IBLOCK_ID"]);
-                        }
-                        $CACHE_MANAGER->EndTagCache();
+    <div class="left_block">
+        <div class="catalog smart_filter">
+            <?if('Y' == $arParams['USE_FILTER']):?>
+                <?
+                if(CModule::IncludeModule("iblock")){
+                    $arFilter = array("IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y");
+                    if(0 < intval($arResult["VARIABLES"]["SECTION_ID"])){
+                        $arFilter["ID"] = $arResult["VARIABLES"]["SECTION_ID"];
+                    }
+                    elseif('' != $arResult["VARIABLES"]["SECTION_CODE"]){
+                        $arFilter["=CODE"] = $arResult["VARIABLES"]["SECTION_CODE"];
+                    }
+                    $obCache = new CPHPCache();
+                    if($obCache->InitCache(36000, serialize($arFilter), "/iblock/catalog")){
+                        $arCurSection = $obCache->GetVars();
                     }
                     else{
-                        if(!$arCurSection = $dbRes->GetNext()){
-                            $arCurSection = array();
+                        $arCurSection = array();
+                        $dbRes = CIBlockSection::GetList(array(), $arFilter, false, array("ID"));
+                        if(defined("BX_COMP_MANAGED_CACHE")){
+                            global $CACHE_MANAGER;
+                            $CACHE_MANAGER->StartTagCache("/iblock/catalog");
+                            if($arCurSection = $dbRes->GetNext()){
+                                $CACHE_MANAGER->RegisterTag("iblock_id_".$arParams["IBLOCK_ID"]);
+                            }
+                            $CACHE_MANAGER->EndTagCache();
                         }
+                        else{
+                            if(!$arCurSection = $dbRes->GetNext()){
+                                $arCurSection = array();
+                            }
+                        }
+                        $obCache->EndDataCache($arCurSection);
                     }
-                    $obCache->EndDataCache($arCurSection);
                 }
-            }
-            global $arrFilterBrands;
-            $arrFilterBrands = array(
-                'PROPERTY_BRAND' => $arBrand['ID'],
-                'ID' => $arElemIDs
-            );
-            $APPLICATION->IncludeComponent(
-                "your:catalog.smart.filter",
-                "brands",
-                Array(
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arCurSection['ID'],
-                    "FILTER_NAME" => $arParams["FILTER_NAME"],
-                    "PRICE_CODE" => "",
-                    "CACHE_TYPE" => "N",
-                    "CACHE_TIME" => "36000000",
-                    "CACHE_NOTES" => "",
-                    "CACHE_GROUPS" => "Y",
-                    "SAVE_IN_SESSION" => "N",
-                    "XML_EXPORT" => "Y",
-                    "SECTION_TITLE" => "NAME",
-                    "SECTION_DESCRIPTION" => "DESCRIPTION",
-                    "SHOW_HINTS" => $arParams["SHOW_HINTS"],
-                ),
-                $component, array('HIDE_ICONS' => 'N')
-            );
-            ?>
-        <?endif;?>
-        <?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>
-            <?$APPLICATION->IncludeComponent(
-                "bitrix:catalog.section.list",
-                "internal_sections_list",
-                Array(
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    //"SECTION_ID" => $arSection["IBLOCK_SECTION_ID"],
-                    //"SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
-                    "CACHE_TYPE" => $arParams["CACHE_TYPE"],
-                    "CACHE_TIME" => $arParams["CACHE_TIME"],
-                    "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-                    "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-                    "COUNT_ELEMENTS" => $arParams["SECTION_COUNT_ELEMENTS"],
-                    "ADD_SECTIONS_CHAIN" => "N",
-                    "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
-                    "TOP_DEPTH" => "3",
-                ),$component
+                global $arrFilterBrands;
+                $arrFilterBrands = array(
+                    'PROPERTY_BRAND' => $arBrand['ID'],
+                    'ID' => $arElemIDs
+                );
+                $APPLICATION->IncludeComponent(
+                    "your:catalog.smart.filter",
+                    "brands",
+                    Array(
+                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                        "SECTION_ID" => $arCurSection['ID'],
+                        "FILTER_NAME" => $arParams["FILTER_NAME"],
+                        "PRICE_CODE" => "",
+                        "CACHE_TYPE" => "N",
+                        "CACHE_TIME" => "36000000",
+                        "CACHE_NOTES" => "",
+                        "CACHE_GROUPS" => "Y",
+                        "SAVE_IN_SESSION" => "N",
+                        "XML_EXPORT" => "Y",
+                        "SECTION_TITLE" => "NAME",
+                        "SECTION_DESCRIPTION" => "DESCRIPTION",
+                        "SHOW_HINTS" => $arParams["SHOW_HINTS"],
+                    ),
+                    $component, array('HIDE_ICONS' => 'N')
+                );
+                ?>
+            <?endif;?>
+            <?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>
+                <?$APPLICATION->IncludeComponent(
+                    "bitrix:catalog.section.list",
+                    "internal_sections_list",
+                    Array(
+                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                        //"SECTION_ID" => $arSection["IBLOCK_SECTION_ID"],
+                        //"SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+                        "DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
+                        "CACHE_TYPE" => $arParams["CACHE_TYPE"],
+                        "CACHE_TIME" => $arParams["CACHE_TIME"],
+                        "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
+                        "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
+                        "COUNT_ELEMENTS" => $arParams["SECTION_COUNT_ELEMENTS"],
+                        "ADD_SECTIONS_CHAIN" => "N",
+                        "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
+                        "TOP_DEPTH" => "3",
+                    ),$component
+                );?>
+            <?endif;?>
+            <?$APPLICATION->IncludeComponent("bitrix:sale.viewed.product", "main", array(
+                "VIEWED_COUNT" => "3",
+                "VIEWED_NAME" => "Y",
+                "VIEWED_IMAGE" => "Y",
+                "VIEWED_PRICE" => "Y",
+                "VIEWED_CURRENCY" => "default",
+                "VIEWED_CANBUY" => "N",
+                "VIEWED_CANBASKET" => "N",
+                "BASKET_URL" => SITE_DIR."basket/",
+                "ACTION_VARIABLE" => "action",
+                "PRODUCT_ID_VARIABLE" => "id",
+                "SET_TITLE" => "N"
+            ),
+                false
             );?>
-        <?endif;?>
-        <?$APPLICATION->IncludeComponent("bitrix:sale.viewed.product", "main", array(
-            "VIEWED_COUNT" => "3",
-            "VIEWED_NAME" => "Y",
-            "VIEWED_IMAGE" => "Y",
-            "VIEWED_PRICE" => "Y",
-            "VIEWED_CURRENCY" => "default",
-            "VIEWED_CANBUY" => "N",
-            "VIEWED_CANBASKET" => "N",
-            "BASKET_URL" => SITE_DIR."basket/",
-            "ACTION_VARIABLE" => "action",
-            "PRODUCT_ID_VARIABLE" => "id",
-            "SET_TITLE" => "N"
-        ),
-            false
-        );?>
-        <?$APPLICATION->IncludeComponent("aspro:com.banners", "small_banners", array(
+            <?$APPLICATION->IncludeComponent("aspro:com.banners", "small_banners", array(
             "IBLOCK_TYPE" => $arParams["IBLOCK_BANNERS_TYPE"],
             "IBLOCK_ID" => $arParams["IBLOCK_BANNERS_ID"],
             "TYPE_BANNERS_IBLOCK_ID" => $arParams["IBLOCK_BANNERS_TYPE_ID"],
@@ -576,6 +577,7 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         ),
             false
         );?>
+        </div>
     </div>
     <div class="compare_small" id="compare_small"></div>
     <div class="right_block clearfix catalog">

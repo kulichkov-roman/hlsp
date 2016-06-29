@@ -59,7 +59,6 @@ if($values['SECTION_META_DESCRIPTION']){
 if($values['SECTION_META_KEYWORDS']){
     $APPLICATION->SetPageProperty("keywords", $values['SECTION_META_KEYWORDS']);
 }
-$iSectionsCount = CIBlockSection::GetCount(array("SECTION_ID" => $arSection["ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y"));
 
 $environment = \Your\Environment\EnvironmentManager::getInstance();
 
@@ -91,378 +90,107 @@ if($arResult['VARIABLES']['BRAND'] <> '')
     }
 }
 ?>
-<?if($iSectionsCount > 0):?>
-    <script type="text/javascript" src="/js/jquery.main.js"></script>
-    <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.accordion.js"></script>
-    <script src="/js/jquery01.js" type="text/javascript"></script>
-
-    <style>
-        ul li::before {
-            content: ""!important;
-        }
-        .accordion li.active a.opener
-        {
-            background: linear-gradient(to bottom, #c32560 0%, #9c0f3a 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-            color: #fff;
-        }
-    </style>
-
-    <div class="container">
-
-        <div class="sidebar">
-            <?$APPLICATION->IncludeComponent(
-                "bitrix:catalog.section.list",
-                "subsections_list_ito_15",
-                Array(
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
-                    "CACHE_TYPE" => $arParams["CACHE_TYPE"],
-                    "CACHE_TIME" => $arParams["CACHE_TIME"],
-                    "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-                    "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-                    "COUNT_ELEMENTS" => $arParams["SECTION_COUNT_ELEMENTS"],
-                    "ADD_SECTIONS_CHAIN" => $arParams["ADD_SECTIONS_CHAIN"],
-                    "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
-                    "TOP_DEPTH" => "1",
-                ),
-                $component
-            );?>
-        </div>
-
-        <div class="content">
-            <?
-            global $APPLICATION, $USER, $arrSeoFilter;
-            $curDir = $APPLICATION->GetCurDir();
-
-            $arrSeoFilter = array();
-
-            switch($curDir)
-            {
-                case '/catalog/make_up/bb_ss_kremy_tonalnye_sredstva/missha_bb_cream/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 1202
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 24;
-
-                    break;
-                case '/catalog/make_up/dlya_gub/tony_moly_tint/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 232
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 69;
-
-                    break;
-                case '/catalog/make_up/bb_ss_kremy_tonalnye_sredstva/bb_cream_tony_moly/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 232
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 52;
-
-                    break;
-                case '/catalog/for_hair/shampuni_i_konditsionery/kerasys/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 1110
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 70;
-
-                    break;
-                case '/catalog/for_hair/lechenie/kerasys_maska/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 1110
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 71;
-
-                    break;
-                case '/catalog/make_up/bb_ss_kremy_tonalnye_sredstva/mizon/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 235
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 24;
-
-                    break;
-                case '/catalog/basecare/uvlazhnyayushchie_kremy/saem/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 854
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 20;
-
-                    break;
-                case '/catalog/make_up/bb_ss_kremy_tonalnye_sredstva/skin79/':
-                    $arrSeoFilter = array(
-                        "PROPERTY_BRAND" => 233
-                    );
-
-                    $arResult["VARIABLES"]["SECTION_ID"] = 20;
-
-                    break;
-            }
-
-            if(sizeof($arrSeoFilter) > 0)
-            {
-                $arParams["FILTER_NAME"] = 'arrSeoFilter';
-            }
-
-            $arSort = array();
-            $arFilter = array(
-                "IBLOCK_ID" => $arParams['IBLOCK_ID'],
-                "ID" => $arResult["VARIABLES"]["SECTION_ID"],
-            );
-            $arSelect = array(
-                "ID",
-                "NAME",
-                "UF_SEC_SEO_TEXT"
-            );
-
-            $rsSection = CIBlockSection::GetList(
-                $arSort,
-                $arFilter,
-                false,
-                $arSelect,
-                false
-            );
-
-            $name = "";
-            $description = "";
-            if($arItems = $rsSection->GetNext())
-            {
-                $name = $arItems['NAME'];
-                $description = $arItems['UF_SEC_SEO_TEXT'];
-            }
-
-            $SEO_DATA = getSeoDataCatalog();
-            if($SEO_DATA)
-            {
-                CHTTP::SetStatus("200 OK");
-                define("NO_ERROR_404",'Y');
-            }
-            if(count($SEO_DATA['filters']) > 0)
-            {
-                $arrSeoFilter = $SEO_DATA['filters'];
-                $arParams["FILTER_NAME"] = 'arrSeoFilter';
-            }
-            if(count($SEO_DATA['breadcrumbs']) > 0)
-            {
-                foreach($SEO_DATA['breadcrumbs'] as $val)
-                    $APPLICATION->AddChainItem($val[0],$val[1]);
-            }
-
-            if(count($SEO_DATA['seo_meta']) > 0)
-            {
-                $tmp=trim($SEO_DATA['seo_meta']['H1']);
-                if(strlen($tmp))
-                {
-                    $APPLICATION -> SetTitle($tmp);
-                    $name = $tmp;
-                }
-            }
-            if(strlen($SEO_DATA['SEO_TEXT']))
-            {
-                if(intval($_GET['PAGEN_1'])<=0 )
-                    $description = $SEO_DATA['SEO_TEXT'];
-            }
-            ?>
-            <div class="content-header">
-                <h1><?=$name?></h1>
-                <div class="content-header__context">
-                    <?=$description?>
-                </div>
-            </div>
-            <?
-            $APPLICATION->IncludeComponent(
-                "your:catalog.section.brands",
-                "brands",
-                Array(
-                    "SEF_URL_TEMPLATES" => $arParams["SEF_URL_TEMPLATES"],
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "ELEMENT_SORT_FIELD" => $sort,
-                    "ELEMENT_SORT_ORDER" => $sort_order,
-                    "FILTER_NAME" => $arParams["FILTER_NAME"],
-                    "USE_FILTER" => "Y",
-                    "INCLUDE_SUBSECTIONS" => $arParams["INCLUDE_SUBSECTIONS"],
-                    "PAGE_ELEMENT_COUNT" => $show,
-                    "LINE_ELEMENT_COUNT" => $arParams["LINE_ELEMENT_COUNT"],
-                    "PROPERTY_CODE" => $arParams["LIST_PROPERTY_CODE"],
-                    "OFFERS_FIELD_CODE" => $arParams["LIST_OFFERS_FIELD_CODE"],
-                    "OFFERS_PROPERTY_CODE" => $arParams["LIST_OFFERS_PROPERTY_CODE"],
-                    "OFFERS_SORT_FIELD" => $arParams["OFFERS_SORT_FIELD"],
-                    "OFFERS_SORT_ORDER" => $arParams["OFFERS_SORT_ORDER"],
-                    "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-                    "DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["element"],
-                    "BASKET_URL" => $arParams["BASKET_URL"],
-                    "ACTION_VARIABLE" => $arParams["ACTION_VARIABLE"],
-                    "PRODUCT_ID_VARIABLE" => $arParams["PRODUCT_ID_VARIABLE"],
-                    "PRODUCT_QUANTITY_VARIABLE" => "quantity",
-                    "PRODUCT_PROPS_VARIABLE" => "prop",
-                    "SECTION_ID_VARIABLE" => $arParams["SECTION_ID_VARIABLE"],
-                    "AJAX_MODE" => $arParams["AJAX_MODE"],
-                    "AJAX_OPTION_JUMP" => $arParams["AJAX_OPTION_JUMP"],
-                    "AJAX_OPTION_STYLE" => $arParams["AJAX_OPTION_STYLE"],
-                    "AJAX_OPTION_HISTORY" => $arParams["AJAX_OPTION_HISTORY"],
-                    "CACHE_TYPE" =>$arParams["CACHE_TYPE"],
-                    "CACHE_TIME" => $arParams["CACHE_TIME"],
-                    "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-                    "META_KEYWORDS" => $arParams["LIST_META_KEYWORDS"],
-                    "META_DESCRIPTION" => $arParams["LIST_META_DESCRIPTION"],
-                    "BROWSER_TITLE" => $arParams["LIST_BROWSER_TITLE"],
-                    "ADD_SECTIONS_CHAIN" => "N",
-                    "HIDE_NOT_AVAILABLE" => $arParams["HIDE_NOT_AVAILABLE"],
-                    "DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
-                    "SET_TITLE" => $arParams["SET_TITLE"],
-                    "SET_STATUS_404" => $arParams["SET_STATUS_404"],
-                    "CACHE_FILTER" => $arParams["CACHE_FILTER"],
-                    "PRICE_CODE" => $arParams["PRICE_CODE"],
-                    "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
-                    "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
-                    "PRICE_VAT_INCLUDE" => $arParams["PRICE_VAT_INCLUDE"],
-                    "USE_PRODUCT_QUANTITY" => $arParams["USE_PRODUCT_QUANTITY"],
-                    "OFFERS_CART_PROPERTIES" => array(),
-                    "DISPLAY_TOP_PAGER" => $arParams["DISPLAY_TOP_PAGER"],
-                    "DISPLAY_BOTTOM_PAGER" => $arParams["DISPLAY_BOTTOM_PAGER"],
-                    "PAGER_TITLE" => $arParams["PAGER_TITLE"],
-                    "PAGER_SHOW_ALWAYS" => $arParams["PAGER_SHOW_ALWAYS"],
-                    "PAGER_TEMPLATE" => $arParams["PAGER_TEMPLATE"],
-                    "PAGER_DESC_NUMBERING" => $arParams["PAGER_DESC_NUMBERING"],
-                    "PAGER_DESC_NUMBERING_CACHE_TIME" => $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"],
-                    "PAGER_SHOW_ALL" => $arParams["PAGER_SHOW_ALL"],
-                    "AJAX_OPTION_ADDITIONAL" => "",
-                    "ADD_CHAIN_ITEM" => "N",
-                    "SHOW_QUANTITY" => $arParams["SHOW_QUANTITY"],
-                    "SHOW_QUANTITY_COUNT" => $arParams["SHOW_QUANTITY_COUNT"],
-                    "CONVERT_CURRENCY" => $arParams["CONVERT_CURRENCY"],
-                    "CURRENCY_ID" => $arParams["CURRENCY_ID"],
-                    "USE_STORE" => $arParams["USE_STORE"],
-                    "MAX_AMOUNT" => $arParams["MAX_AMOUNT"],
-                    "MIN_AMOUNT" => $arParams["MIN_AMOUNT"],
-                    "USE_MIN_AMOUNT" => $arParams["USE_MIN_AMOUNT"],
-                    "USE_ONLY_MAX_AMOUNT" => $arParams["USE_ONLY_MAX_AMOUNT"],
-                    "DISPLAY_WISH_BUTTONS" => $arParams["DISPLAY_WISH_BUTTONS"],
-                    "DEFAULT_COUNT" => $arParams["DEFAULT_COUNT"],
-                    "LIST_DISPLAY_POPUP_IMAGE" => $arParams["LIST_DISPLAY_POPUP_IMAGE"],
-                    "SHOW_MEASURE" => $arParams["SHOW_MEASURE"],
-                    "SHOW_HINTS" => $arParams["SHOW_HINTS"],
-                    "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
-                    "SECTIONS_LIST_PREVIEW_PROPERTY" => $arParams["SECTIONS_LIST_PREVIEW_PROPERTY"],
-                    "SHOW_SECTION_LIST_PICTURES" => $arParams["SHOW_SECTION_LIST_PICTURES"],
-                    "BRAND_ID" => "233",
-                ), $component
-            );?>
-        </div>
-    </div>
-<?else:?>
-    <div class="left_block catalog">
-        <?if('Y' == $arParams['USE_FILTER']):?>
-            <?
-            if(CModule::IncludeModule("iblock")){
-                $arFilter = array("IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y");
-                if(0 < intval($arResult["VARIABLES"]["SECTION_ID"])){
-                    $arFilter["ID"] = $arResult["VARIABLES"]["SECTION_ID"];
-                }
-                elseif('' != $arResult["VARIABLES"]["SECTION_CODE"]){
-                    $arFilter["=CODE"] = $arResult["VARIABLES"]["SECTION_CODE"];
-                }
-                $obCache = new CPHPCache();
-                if($obCache->InitCache(36000, serialize($arFilter), "/iblock/catalog")){
-                    $arCurSection = $obCache->GetVars();
-                }
-                else{
-                    $arCurSection = array();
-                    $dbRes = CIBlockSection::GetList(array(), $arFilter, false, array("ID"));
-                    if(defined("BX_COMP_MANAGED_CACHE")){
-                        global $CACHE_MANAGER;
-                        $CACHE_MANAGER->StartTagCache("/iblock/catalog");
-                        if($arCurSection = $dbRes->GetNext()){
-                            $CACHE_MANAGER->RegisterTag("iblock_id_".$arParams["IBLOCK_ID"]);
-                        }
-                        $CACHE_MANAGER->EndTagCache();
+    <div class="left_block">
+        <div class="catalog smart_filter">
+            <?if('Y' == $arParams['USE_FILTER']):?>
+                <?
+                if(CModule::IncludeModule("iblock")){
+                    $arFilter = array("IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "GLOBAL_ACTIVE" => "Y");
+                    if(0 < intval($arResult["VARIABLES"]["SECTION_ID"])){
+                        $arFilter["ID"] = $arResult["VARIABLES"]["SECTION_ID"];
+                    }
+                    elseif('' != $arResult["VARIABLES"]["SECTION_CODE"]){
+                        $arFilter["=CODE"] = $arResult["VARIABLES"]["SECTION_CODE"];
+                    }
+                    $obCache = new CPHPCache();
+                    if($obCache->InitCache(36000, serialize($arFilter), "/iblock/catalog")){
+                        $arCurSection = $obCache->GetVars();
                     }
                     else{
-                        if(!$arCurSection = $dbRes->GetNext()){
-                            $arCurSection = array();
+                        $arCurSection = array();
+                        $dbRes = CIBlockSection::GetList(array(), $arFilter, false, array("ID"));
+                        if(defined("BX_COMP_MANAGED_CACHE")){
+                            global $CACHE_MANAGER;
+                            $CACHE_MANAGER->StartTagCache("/iblock/catalog");
+                            if($arCurSection = $dbRes->GetNext()){
+                                $CACHE_MANAGER->RegisterTag("iblock_id_".$arParams["IBLOCK_ID"]);
+                            }
+                            $CACHE_MANAGER->EndTagCache();
                         }
+                        else{
+                            if(!$arCurSection = $dbRes->GetNext()){
+                                $arCurSection = array();
+                            }
+                        }
+                        $obCache->EndDataCache($arCurSection);
                     }
-                    $obCache->EndDataCache($arCurSection);
                 }
-            }
 
-            global $arrFilterBrands;
-            $arrFilterBrands = array(
-                'PROPERTY_BRAND' => $arBrand['ID']
-            );
-            $APPLICATION->IncludeComponent(
-                "your:catalog.smart.filter",
-                "brands",
-                Array(
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arCurSection['ID'],
-                    "FILTER_NAME" => $arParams["FILTER_NAME"],
-                    "PRICE_CODE" => "",
-                    "CACHE_TYPE" => "N",
-                    "CACHE_TIME" => "36000000",
-                    "CACHE_NOTES" => "",
-                    "CACHE_GROUPS" => "Y",
-                    "SAVE_IN_SESSION" => "N",
-                    "XML_EXPORT" => "Y",
-                    "SECTION_TITLE" => "NAME",
-                    "SECTION_DESCRIPTION" => "DESCRIPTION",
-                    "SHOW_HINTS" => $arParams["SHOW_HINTS"],
-                ),
-                $component, array('HIDE_ICONS' => 'Y')
-            );
-            ?>
-        <?endif;?>
-        <?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>
-            <?$APPLICATION->IncludeComponent(
-                "bitrix:catalog.section.list",
-                "internal_sections_list",
-                Array(
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    //"SECTION_ID" => $arSection["IBLOCK_SECTION_ID"],
-                    //"SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
-                    "CACHE_TYPE" => $arParams["CACHE_TYPE"],
-                    "CACHE_TIME" => $arParams["CACHE_TIME"],
-                    "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-                    "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-                    "COUNT_ELEMENTS" => $arParams["SECTION_COUNT_ELEMENTS"],
-                    "ADD_SECTIONS_CHAIN" => "N",
-                    "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
-                    "TOP_DEPTH" => "3",
-                ),
-                $component
+                global $arrFilterBrands;
+                $arrFilterBrands = array(
+                    'PROPERTY_BRAND' => $arBrand['ID']
+                );
+                $APPLICATION->IncludeComponent(
+                    "your:catalog.smart.filter",
+                    "brands",
+                    Array(
+                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                        "SECTION_ID" => $arCurSection['ID'],
+                        "FILTER_NAME" => $arParams["FILTER_NAME"],
+                        "PRICE_CODE" => "",
+                        "CACHE_TYPE" => "N",
+                        "CACHE_TIME" => "36000000",
+                        "CACHE_NOTES" => "",
+                        "CACHE_GROUPS" => "Y",
+                        "SAVE_IN_SESSION" => "N",
+                        "XML_EXPORT" => "Y",
+                        "SECTION_TITLE" => "NAME",
+                        "SECTION_DESCRIPTION" => "DESCRIPTION",
+                        "SHOW_HINTS" => $arParams["SHOW_HINTS"],
+                    ),
+                    $component, array('HIDE_ICONS' => 'Y')
+                );
+                ?>
+            <?endif;?>
+            <?if($arParams["SHOW_SECTION_SIBLINGS"] == "Y"):?>
+                <?$APPLICATION->IncludeComponent(
+                    "bitrix:catalog.section.list",
+                    "internal_sections_list",
+                    Array(
+                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                        //"SECTION_ID" => $arSection["IBLOCK_SECTION_ID"],
+                        //"SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+                        "DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
+                        "CACHE_TYPE" => $arParams["CACHE_TYPE"],
+                        "CACHE_TIME" => $arParams["CACHE_TIME"],
+                        "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
+                        "SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
+                        "COUNT_ELEMENTS" => $arParams["SECTION_COUNT_ELEMENTS"],
+                        "ADD_SECTIONS_CHAIN" => "N",
+                        "SHOW_SECTIONS_LIST_PREVIEW" => $arParams["SHOW_SECTIONS_LIST_PREVIEW"],
+                        "TOP_DEPTH" => "3",
+                    ),
+                    $component
+                );?>
+            <?endif;?>
+            <?$APPLICATION->IncludeComponent("bitrix:sale.viewed.product", "main", array(
+                "VIEWED_COUNT" => "3",
+                "VIEWED_NAME" => "Y",
+                "VIEWED_IMAGE" => "Y",
+                "VIEWED_PRICE" => "Y",
+                "VIEWED_CURRENCY" => "default",
+                "VIEWED_CANBUY" => "N",
+                "VIEWED_CANBASKET" => "N",
+                "BASKET_URL" => SITE_DIR."basket/",
+                "ACTION_VARIABLE" => "action",
+                "PRODUCT_ID_VARIABLE" => "id",
+                "SET_TITLE" => "N"
+            ),
+                false
             );?>
-        <?endif;?>
-        <?$APPLICATION->IncludeComponent("bitrix:sale.viewed.product", "main", array(
-            "VIEWED_COUNT" => "3",
-            "VIEWED_NAME" => "Y",
-            "VIEWED_IMAGE" => "Y",
-            "VIEWED_PRICE" => "Y",
-            "VIEWED_CURRENCY" => "default",
-            "VIEWED_CANBUY" => "N",
-            "VIEWED_CANBASKET" => "N",
-            "BASKET_URL" => SITE_DIR."basket/",
-            "ACTION_VARIABLE" => "action",
-            "PRODUCT_ID_VARIABLE" => "id",
-            "SET_TITLE" => "N"
-        ),
-            false
-        );?>
-        <?$APPLICATION->IncludeComponent("aspro:com.banners", "small_banners", array(
+            <?$APPLICATION->IncludeComponent("aspro:com.banners", "small_banners", array(
             "IBLOCK_TYPE" => $arParams["IBLOCK_BANNERS_TYPE"],
             "IBLOCK_ID" => $arParams["IBLOCK_BANNERS_ID"],
             "TYPE_BANNERS_IBLOCK_ID" => $arParams["IBLOCK_BANNERS_TYPE_ID"],
@@ -483,6 +211,7 @@ if($arResult['VARIABLES']['BRAND'] <> '')
         ),
             false
         );?>
+        </div>
     </div>
     <div class="compare_small" id="compare_small"></div>
     <div class="right_block clearfix catalog">
@@ -766,7 +495,6 @@ if($arResult['VARIABLES']['BRAND'] <> '')
         );
         ?>
     </div>
-<?endif;?>
     <script type="text/javascript">
         $(".sort_filter a").on("click", function(){
             if($(this).is(".current")){
@@ -786,7 +514,6 @@ if($arResult['VARIABLES']['BRAND'] <> '')
             $(this).addClass("current").siblings().removeClass("current");
         });
     </script>
-
 <?
 
 if(count($SEO_DATA['seo_meta']) > 0)

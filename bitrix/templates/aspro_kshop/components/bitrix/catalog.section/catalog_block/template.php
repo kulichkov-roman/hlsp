@@ -210,20 +210,12 @@
 		), $component
 	);?>
 <?}?>
-<?if ($arResult["~DESCRIPTION"]):?>
+<?if ($arResult["DESCRIPTION"]){?>
 	<div class="group_description">
 		<img class="shadow" src="<?=SITE_TEMPLATE_PATH?>/images/shadow_bottom.png" />
-		<div><?=$arResult["~DESCRIPTION"]?></div>
+		<div><?=$arResult["DESCRIPTION"]?></div>
 	</div>
-<?else:?>
-	<?$arSection = CIBlockSection::GetList(array(), array( "IBLOCK_ID" => $arResult["IBLOCK_ID"], "ID" => $arResult["ID"] ), false, array( "ID", "UF_SECTION_DESCR"))->GetNext();?>
-	<?if ($arSection["UF_SECTION_DESCR"]):?>
-		<div class="group_description">
-			<img class="shadow" src="<?=SITE_TEMPLATE_PATH?>/images/shadow_bottom.png" />
-			<div><?=$arSection["UF_SECTION_DESCR"]?></div>
-		</div>
-	<?endif;?>
-<?endif;?>
+<?}?>
 
 <div class="clear"></div>
 <script>

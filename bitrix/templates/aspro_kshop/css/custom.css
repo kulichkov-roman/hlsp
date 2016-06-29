@@ -1,15 +1,4 @@
-/*NOTE: This file is intended for programmers. Aspro technical support is not advised to work with him.*/
 
-/* Examples (uncomment to use):*/
-
-/* Expand site width */
-/* body .wrapper { max-width: 1400px !important;  } */
-
-/* Set site background image */
-/* body {  background: url(image_source) top no-repeat; }
-
-/* Hide compare button */
-/* a.compare_item { display: none !important;  }*/
 
 #header .catalog_menu ul.menu > li > a {padding: 0 8px; font-size: 12px;}
 h1 {font-size:24px;}
@@ -59,6 +48,7 @@ h1 {font-size:24px;}
 /*-------  end custom header -------*/
 
 /*Фильтра*/
+
 .bx_filter_vertical label {
     color: #bd104e;
     padding-left: 5px;
@@ -73,6 +63,7 @@ h1 {font-size:24px;}
 }
 
 /*Подразделы*/
+
 .product-group-links {
     width: 100%;
     max-width: 777px;
@@ -112,6 +103,10 @@ li.product-group-links__item a:focus {
 }
 
 /*Левоем меню*/
-#content  .left_block {
+.smart_filter {
     padding-top: 58px;
+}
+
+.sections_list {
+    padding-top: 17px;
 }

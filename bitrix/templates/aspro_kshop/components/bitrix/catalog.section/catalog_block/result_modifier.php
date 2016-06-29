@@ -132,4 +132,29 @@
 			$arResult["ITEMS"][$cell]["SKU_PROPERTIES"] = $arIblockOfferProps2;
 		}
 	}
+
+global $APPLICATION;
+$environment = \Your\Environment\EnvironmentManager::getInstance();
+$arDescriptionSort = array();
+$arDescriptionSelect = array(
+	'ID',
+	'NAME',
+	'DETAIL_TEXT'
+);
+$arDescriptionFilter = array(
+	'IBLOCK_ID' => $environment->get('seoDataIBlock'),
+	'NAME' => $APPLICATION->GetCurDir()
+);
+$rsDescription = CIBlockElement::GetList(
+	$arDescriptionSort,
+	$arDescriptionFilter,
+	false,
+	false,
+	$arDescriptionSelect
+);
+$arDescription = array();
+if ($arItem = $rsDescription->GetNext())
+{
+	$arResult['DESCRIPTION'] = $arItem['DETAIL_TEXT'];
+}
 ?>
