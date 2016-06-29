@@ -210,10 +210,10 @@
 		), $component
 	);?>
 <?}?>
-<?if ($arResult["DESCRIPTION"]){?>
+<?if ($arResult["SEO_DESCRIPTION"]){?>
 	<div class="group_description">
 		<img class="shadow" src="<?=SITE_TEMPLATE_PATH?>/images/shadow_bottom.png" />
-		<div><?=$arResult["DESCRIPTION"]?></div>
+		<div><?=$arResult["SEO_DESCRIPTION"]?></div>
 	</div>
 <?}?>
 

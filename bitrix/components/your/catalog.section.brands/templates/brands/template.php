@@ -122,10 +122,10 @@
 		), $component
 	);?>
 <?}?>
-<?if ($arResult["DESCRIPTION"]){?>
+<?if ($arResult["SEO_DESCRIPTION"]){?>
 	<div class="text">
 		<p>
-			<?=$arResult["DESCRIPTION"]?></p>
+			<?=$arResult["SEO_DESCRIPTION"]?></p>
 	</div>
 <?}?>
 

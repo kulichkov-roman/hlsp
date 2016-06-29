@@ -187,6 +187,6 @@
 	$arDescription = array();
 	if ($arItem = $rsDescription->GetNext())
 	{
-		$arResult['DESCRIPTION'] = $arItem['DETAIL_TEXT'];
+		$arResult['SEO_DESCRIPTION'] = $arItem['DETAIL_TEXT'];
 	}
 ?>
