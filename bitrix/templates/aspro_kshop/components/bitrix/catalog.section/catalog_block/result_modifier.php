@@ -141,6 +141,7 @@ $arDescriptionSelect = array(
 	'NAME',
 	'DETAIL_TEXT'
 );
+
 $arDescriptionFilter = array(
 	'IBLOCK_ID' => $environment->get('seoDataIBlock'),
 	'NAME' => $APPLICATION->GetCurDir()
@@ -152,8 +153,7 @@ $rsDescription = CIBlockElement::GetList(
 	false,
 	$arDescriptionSelect
 );
-$arDescription = array();
-if ($arItem = $rsDescription->GetNext())
+if ($arItem = $rsDescription->Fetch())
 {
 	$arResult['SEO_DESCRIPTION'] = $arItem['DETAIL_TEXT'];
 }

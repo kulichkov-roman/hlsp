@@ -636,6 +636,7 @@ ul li::before {
 				$show=intVal($_SESSION["show"]);
 			}
 		}
+
 		$APPLICATION->IncludeComponent(
 			"bitrix:catalog.section",
 			$template,
