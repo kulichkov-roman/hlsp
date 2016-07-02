@@ -123,8 +123,8 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 			$arResult["ITEMS"][$key]["VALUES"][0]["VALUE"]=$arItem["NAME"];
 	} elseif($arItem["CODE"] == "CML2_MANUFACTURER"){
 
-		$arBrandCodes = getBrandsInDir();
-		
+		$arBrandCodes = HLSP\Helper\UrlHelper::getBrandsInDir();
+
 		$arResult['ITEMS'][$key]['VALUES'] = array();
 
 		foreach($arBrandCodes as $strBrandName => $arBrandCode)
@@ -135,6 +135,7 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 
 			$arRatio = array(
 				4 => 0,
+				5 => 1,
 				6 => 1,
 				7 => 2,
 				8 => 3,
