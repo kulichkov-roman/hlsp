@@ -20,7 +20,7 @@ class UrlHelper
     {}
 
     /**
-     * Добавить в цепочку дополнительные разделы
+     * Получить список брендов по данных из URL
      * @todo не универсальное решение
      */
     public static function getBrandsInDir()
@@ -44,7 +44,14 @@ class UrlHelper
         $index = 0;
         if(sizeof($arUrl) > 3)
         {
-            $index = 3;
+            if(preg_match("#/rasprodazha/#", $curDir))
+            {
+                $index = 2;
+            }
+            else
+            {
+                $index = 3;
+            }
         }
         else
         {

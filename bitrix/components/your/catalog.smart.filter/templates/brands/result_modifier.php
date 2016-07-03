@@ -4,107 +4,53 @@ while($item = $resProperty->Fetch()){
 	$arHitPropertyValues[$item["ID"]] = $item;
 }
 
-function getBrandsInDir()
-{
-	global $APPLICATION;
-
-	$environment = \Your\Environment\EnvironmentManager::getInstance();
-
-	$curDir = $APPLICATION->GetCurDir();
-
-	$arRatio = array(
-		6 => 1,
-		7 => 2,
-		8 => 3,
-	);
-
-	$arUrl = array_unique(explode('/', $curDir));
-
-	array_splice($arUrl, sizeof($arUrl)-$arRatio[sizeof($arUrl)]);
-
-	$arSecSort = array();
-	$arSecFilter = array(
-		"IBLOCK_ID" => $environment->get('catalogIBlock'),
-		"CODE" => $arUrl['3']
-	);
-	$arSecSelect = array(
-		"ID",
-		"NAME",
-	);
-
-	$rsSection =  \CIBlockSection::GetList(
-		$arSecSort,
-		$arSecFilter,
-		false,
-		$arSecSelect,
-		false
-	);
-
-	$arSec = array();
-	if ($arSecItem = $rsSection->Fetch()){}
-
-	$arElemSort = array();
-	$arElemSelect = array(
-		'ID',
-		'NAME',
-		'PROPERTY_BRAND'
-	);
-
-	$arElemFilter = array(
-		'IBLOCK_ID' => $environment->get('catalogIBlock'),
-		'SECTION_ID' => $arSecItem['ID']
-	);
-
-	$rsElements = \CIBlockElement::GetList(
-		$arElemSort,
-		$arElemFilter,
-		false,
-		false,
-		$arElemSelect
-	);
-
-	$arBrandIds = array();
-	while($arElemItem = $rsElements->Fetch())
-	{
-		if($arElemItem['PROPERTY_BRAND_VALUE'])
-		{
-			$arBrandIds[] = $arElemItem['PROPERTY_BRAND_VALUE'];
-		}
-	}
-	$arBrandIds = array_unique($arBrandIds);
-
-	$arBrandSort = array();
-	$arBrandSelect = array(
-		'ID',
-		'NAME',
-		'CODE'
-	);
-
-	$arBrandFilter = array(
-		'IBLOCK_ID' => $environment->get('brandIBlock'),
-		'ID'        => $arBrandIds
-	);
-
-	$rsBrands = CIBlockElement::GetList(
-		$arBrandSort,
-		$arBrandFilter,
-		false,
-		false,
-		$arBrandSelect
-	);
-
-	$arBrandCodes = array();
-	while($arBrandItem = $rsBrands->Fetch())
-	{
-		$arBrandCodes[$arBrandItem['NAME']] = $arBrandItem['CODE'];
-	}
-
-	return $arBrandCodes;
-}
-
 $arResult["SPECIALS_BLOCK"] = array();
 $arResult["SPECIALS_BLOCK"]["HTML"] = "";
 $arResult["SPECIALS_BLOCK"]["OPENED"] = null;
+
+/**
+ * @param $arResult
+ * @param $key
+ * @param $arBrandCodes
+ * @param $APPLICATION
+ *
+ * @return mixed
+ */
+function getResultExtended($arResult, $key, $arBrandCodes, $APPLICATION)
+{
+	$arResult['ITEMS'][$key]['VALUES'] = array();
+
+	foreach ($arBrandCodes as $strBrandName => $arBrandCode) {
+		$curDir = $APPLICATION->GetCurDir();
+
+		$arUrl = array_unique(explode('/', $curDir));
+
+		$arRatio = array(
+			4 => 0,
+			5 => 1,
+			6 => 1,
+			7 => 2,
+			8 => 3,
+		);
+
+		if (!$arRatio[sizeof($arUrl)]) {
+			$arUrl[] = 'brand';
+		} else {
+			array_splice($arUrl, sizeof($arUrl) - $arRatio[sizeof($arUrl)]);
+		}
+
+		$arBrandUrl = $arUrl;
+		$arBrandUrl[] = $arBrandCode;
+		$arBrandUrl[] = '';
+
+		$arResult['ITEMS'][$key]['VALUES'][] = array(
+			'BRAND_URL' => implode('/', $arBrandUrl),
+			'VALUE'     => $strBrandName
+		);
+	}
+	return $arResult;
+}
+
 foreach($arResult["ITEMS"] as $key => $arItem)
 {
 	if( $arItem["CODE"] == "HIT")
@@ -125,39 +71,9 @@ foreach($arResult["ITEMS"] as $key => $arItem)
 
 		$arBrandCodes = HLSP\Helper\UrlHelper::getBrandsInDir();
 
-		$arResult['ITEMS'][$key]['VALUES'] = array();
-
-		foreach($arBrandCodes as $strBrandName => $arBrandCode)
+		if(sizeof($arBrandCodes))
 		{
-			$curDir = $APPLICATION->GetCurDir();
-
-			$arUrl = array_unique(explode('/', $curDir));
-
-			$arRatio = array(
-				4 => 0,
-				5 => 1,
-				6 => 1,
-				7 => 2,
-				8 => 3,
-			);
-
-			if(!$arRatio[sizeof($arUrl)])
-			{
-				$arUrl[] = 'brand';
-			}
-			else
-			{
-				array_splice($arUrl, sizeof($arUrl)-$arRatio[sizeof($arUrl)]);
-			}
-
-			$arBrandUrl   = $arUrl;
-			$arBrandUrl[] = $arBrandCode;
-			$arBrandUrl[] = '';
-
-			$arResult['ITEMS'][$key]['VALUES'][] = array(
-				'BRAND_URL' => implode('/', $arBrandUrl),
-				'VALUE'     => $strBrandName
-			);
+			$arResult = getResultExtended($arResult, $key, $arBrandCodes, $APPLICATION);
 		}
 	}
 }

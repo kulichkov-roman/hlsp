@@ -32,6 +32,7 @@ class ChainHelper
         $curDir = $APPLICATION->GetCurDir();
 
         $arRatio = array(
+            4 => 1,
             5 => 1,
             6 => 2,
             7 => 3,
