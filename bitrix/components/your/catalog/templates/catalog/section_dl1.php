@@ -1,5 +1,6 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();?>
 <?
+
 $arParams["ADD_SECTIONS_CHAIN"] = (isset($arParams["ADD_SECTIONS_CHAIN"])
     ? $arParams["ADD_SECTIONS_CHAIN"] : "Y");
 
@@ -130,11 +131,13 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         'PROPERTY_GEN_URL'
 
     );
+
     $arFilterSubSec = array(
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
         'CODE' => $arResult['VARIABLES']['SECTION_DL1'],
         'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
         'PROPERTY_LEVEL_VALUE' => 1,
+        'PROPERTY_LINK_BRAND' => $arBrand['ID'],
     );
 
     $rsSubSec = \CIBlockElement::GetList(
@@ -156,6 +159,7 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
             'NAME',
             'PROPERTY_LEVEL'
         );
+
         $arFilterElem = array(
             'IBLOCK_ID'      => $environment->get('catalogIBlock'),
             'ID'             => $arSubSecDl1Item['PROPERTY_LINK_ELEMENTS_CAT_VALUE'],
@@ -337,7 +341,8 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
         'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
         'PROPERTY_LEVEL_VALUE' => 2,
-        'PROPERTY_LINK_BRAND' => $arBrand['ID']
+        'PROPERTY_LINK_BRAND' => $arBrand['ID'],
+        'ACTIVE' => 'Y'
     );
     $rsSubSec = \CIBlockElement::GetList(
         $arSortSubSec,
@@ -508,6 +513,11 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         } elseif ($_SESSION["show"]) {
             $show = intVal($_SESSION["show"]);
         }
+    }
+
+    if($USER->isAdmin())
+    {
+        echo "<pre>"; var_dump($arElemIDs); echo "</pre>";
     }
 
     $APPLICATION->IncludeComponent(

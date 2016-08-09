@@ -248,7 +248,8 @@ if($arResult['VARIABLES']['BRAND'] <> '')
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
         'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
         'PROPERTY_LEVEL_VALUE' => 1,
-        'PROPERTY_LINK_BRAND' => $arBrand['ID']
+        'PROPERTY_LINK_BRAND' => $arBrand['ID'],
+        'ACTIVE' => 'Y'
     );
     $rsSubSec = \CIBlockElement::GetList(
         $arSortSubSec,

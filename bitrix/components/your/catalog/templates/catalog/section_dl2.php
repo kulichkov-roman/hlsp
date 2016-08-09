@@ -138,7 +138,9 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
         'CODE' => $arResult['VARIABLES']['SECTION_DL2'],
         'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
-        'PROPERTY_LEVEL_VALUE' => 2
+        'PROPERTY_LEVEL_VALUE' => 2,
+        'PROPERTY_LINK_BRAND' => $arBrand['ID'],
+        'ACTIVE' => 'Y'
     );
 
     $rsSubSec = \CIBlockElement::GetList(
@@ -340,7 +342,8 @@ if($arResult['VARIABLES']['SECTION_DL2'] <> '')
         'IBLOCK_ID' => $environment->get('seoSubsectionsIBlock'),
         'PROPERTY_LINK_SECTION_CAT' => $arResult['VARIABLES']['SECTION_ID'],
         'PROPERTY_LEVEL_VALUE' => 2,
-        'PROPERTY_LINK_BRAND' => $arBrand['ID']
+        'PROPERTY_LINK_BRAND' => $arBrand['ID'],
+        'ACTIVE' => 'Y'
     );
     $rsSubSec = \CIBlockElement::GetList(
         $arSortSubSec,
