@@ -515,11 +515,6 @@ if($arResult['VARIABLES']['SECTION_DL1'] <> '')
         }
     }
 
-    if($USER->isAdmin())
-    {
-        echo "<pre>"; var_dump($arElemIDs); echo "</pre>";
-    }
-
     $APPLICATION->IncludeComponent(
         'your:catalog.section.subsections',
         'subsections',
